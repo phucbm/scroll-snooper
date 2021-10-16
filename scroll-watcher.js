@@ -23,10 +23,10 @@ class ScrollWatcher{
      * @returns {{proportion: number, pixel: number}}
      */
     visibility(){
-        const offset = this.#offset();
+        const offset = this.offset();
         const visible_bottom = Math.max(0, Math.min(offset.h, -1 * offset.top_bottom));
         const visible_top = Math.max(0, Math.min(offset.h, offset.bottom_top));
-        const pixel = Math.min(visible_bottom, visible_top, ScrollWatcher.#viewport().h);
+        const pixel = Math.min(visible_bottom, visible_top, ScrollWatcher.viewport().h);
         const proportion = pixel / offset.h;
 
         return {pixel, proportion};
@@ -36,15 +36,15 @@ class ScrollWatcher{
     /**
      * Element offset
      */
-    #offset(){
+    offset(){
         const x = this.element.offsetLeft;
         const y = this.element.offsetTop;
         const w = this.element.offsetWidth;
         const h = this.element.offsetHeight;
 
         // distance from [anchor] of element to [anchor] of viewport
-        const top_top = y - ScrollWatcher.#scroll().top;
-        const top_bottom = top_top - ScrollWatcher.#viewport().h;
+        const top_top = y - ScrollWatcher.scroll().top;
+        const top_bottom = top_top - ScrollWatcher.viewport().h;
         const bottom_bottom = top_bottom + h;
         const bottom_top = top_top + h;
         const center_top = bottom_top - h * 0.5;
@@ -66,7 +66,7 @@ class ScrollWatcher{
      * Viewport size
      * @returns {{w: number, h: number}}
      */
-    static #viewport(){
+    static viewport(){
         return {
             w: (window.innerWidth || document.documentElement.clientWidth),
             h: (window.innerHeight || document.documentElement.clientHeight)
@@ -78,7 +78,7 @@ class ScrollWatcher{
      * Scroll position
      * @returns {{top: number, left: number}}
      */
-    static #scroll(){
+    static scroll(){
         return {
             left: (window.pageXOffset || document.documentElement.scrollLeft) - (document.documentElement.clientLeft || 0),
             top: (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0)
