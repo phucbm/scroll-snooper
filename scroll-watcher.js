@@ -5,6 +5,15 @@
 class ScrollWatcher{
     constructor(element){
         this.element = element;
+
+        // status
+        this.isEnter = false;
+        this.isEnterFull = false;
+
+        // on scroll
+        window.addEventListener('scroll', () => {
+            this.update();
+        });
     }
 
 
@@ -60,6 +69,79 @@ class ScrollWatcher{
             x, y, w, h,
         };
     };
+
+
+    /**
+     * On events
+     * @param event
+     * @param callback
+     */
+    on(event, callback){
+        switch(event){
+            case 'enter':
+                this.element.addEventListener('onEnter', function(e){
+                    callback(e);
+                }, false);
+                break;
+            case 'enter:full':
+                this.element.addEventListener('onEnterFull', function(e){
+                    callback(e);
+                }, false);
+                break;
+            case 'exit':
+                this.element.addEventListener('onExit', function(e){
+                    callback(e);
+                }, false);
+                break;
+            case 'exit:partial':
+                this.element.addEventListener('onExitPartial', function(e){
+                    callback(e);
+                }, false);
+                break;
+        }
+    }
+
+
+    /**
+     * Events
+     * @type {Event}
+     */
+    static onEnter = new Event('onEnter');
+    static onEnterFull = new Event('onEnterFull');
+    static onExit = new Event('onExit');
+    static onExitPartial = new Event('onExitPartial');
+
+
+    /**
+     * Scroll Update
+     */
+    update(){
+        // Event: enter, exit
+        if(this.isInViewport()){
+            if(!this.isEnter){
+                this.isEnter = true;
+                this.element.dispatchEvent(ScrollWatcher.onEnter);
+            }
+        }else{
+            if(this.isEnter){
+                this.isEnter = false;
+                this.element.dispatchEvent(ScrollWatcher.onExit);
+            }
+        }
+
+        // Event: enterFull, exitPartial
+        if(this.visibility().proportion >= 1){
+            if(!this.isEnterFull){
+                this.isEnterFull = true;
+                this.element.dispatchEvent(ScrollWatcher.onEnterFull);
+            }
+        }else{
+            if(this.isEnterFull){
+                this.element.dispatchEvent(ScrollWatcher.onExitPartial);
+                this.isEnterFull = false;
+            }
+        }
+    }
 
 
     /**

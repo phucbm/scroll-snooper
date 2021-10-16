@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scroll Watcher</title>
-    <script src="../scroll-watcher.js"></script>
+    <script src="scroll-watcher.js"></script>
     <style>
         body {
             font-family:AppleSystemUIFont, sans-serif; height:400vh;
             display:flex; align-items:center; justify-content:center;
         }
         .stats {
-            position:fixed; top:50%; z-index:2;
+            position:fixed; top:50%; z-index:2; width:40vw;
             transform:translateY(-50%);
-            font-size:3vw; line-height:1.5;
+            font-size:2vw; line-height:1.5;
         }
         .stats.blue {color:cornflowerblue; left:3vw;}
         .stats.red {color:crimson; right:3vw; text-align:right;}
@@ -29,6 +29,11 @@
             content:"+"; position:absolute; top:50%; left:50%;
             transform:translate(-50%, -50%); font-size:3vw; color:#fff;
         }
+        .event {
+            background:#eee; color:#000; padding:.1em .2em; border-radius:.2em;
+            font-size:.7em;
+        }
+        .event.on {background:limegreen;}
     </style>
 </head>
 <body>
@@ -36,23 +41,32 @@
 <div class="stats blue" id="blue-stats">
     <div>isInViewport(<span contenteditable="true" id="blue_input">0</span>): <span id="blue_line_1">false</span></div>
     <div>visibility: <span id="blue_line_2"></span></div>
-    <div>positionInViewPort: <span id="blue_line_3">0</span></div>
+    <div>events: <span class="event" id="blue_onEnter">enter</span>
+        <span class="event" id="blue_onEnterFull">enter:full</span>
+        <span class="event" id="blue_onExit">exit</span>
+        <span class="event" id="blue_onExitPartial">exit:partial</span></div>
 </div>
 <div class="stats red" id="red-stats">
     <div>isInViewport(<span contenteditable="true" id="red_input">0</span>): <span id="red_line_1">false</span></div>
     <div>visibility: <span id="red_line_2"></span></div>
-    <div>positionInViewPort: <span id="red_line_3">0</span></div>
+    <div>events: <span class="event" id="red_onEnter">enter</span>
+        <span class="event" id="red_onEnterFull">enter:full</span>
+        <span class="event" id="red_onExit">exit</span>
+        <span class="event" id="red_onExitPartial">exit:partial</span></div>
 </div>
 
 <div id="blue"></div>
 <div id="red"></div>
 
 <script>
-    const blocks = ['blue', 'red'];
+    const blocks = {
+        'blue': new ScrollWatcher(document.getElementById('blue')),
+        'red': new ScrollWatcher(document.getElementById('red')),
+    };
 
     window.addEventListener('scroll', () => {
-        for(const block of blocks){
-            const scroll = new ScrollWatcher(document.getElementById(block));
+        for(const block in blocks){
+            const scroll = blocks[block];
 
             const input = parseFloat(document.getElementById(`${block}_input`).innerText);
             const isInViewport = scroll.isInViewport(input) ? 'true' : 'false';
@@ -63,6 +77,30 @@
             document.getElementById(`${block}_line_2`).innerText = `${proportion} ${pixel}px`;
         }
     });
+
+    // events
+    for(const block in blocks){
+        blocks[block].on('enter', (data) => {
+            updateEvent(block, data.type);
+        });
+        blocks[block].on('enter:full', (data) => {
+            updateEvent(block, data.type);
+        });
+        blocks[block].on('exit', (data) => {
+            updateEvent(block, data.type);
+        });
+        blocks[block].on('exit:partial', (data) => {
+            updateEvent(block, data.type);
+        });
+    }
+
+    function updateEvent(block, event){
+        document.getElementById(`${block}_${event}`).classList.add("on");
+        setTimeout(() => {
+            document.getElementById(`${block}_${event}`).classList.remove("on");
+        }, 1000);
+    }
+
 </script>
 
 </body>
