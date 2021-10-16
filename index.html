@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scroll Watcher</title>
-    <script src="scroll-watcher.js"></script>
+    <title>Scroll Snooper v0.0.1</title>
+    <script src="scroll-snooper.js"></script>
     <style>
         body {
             font-family:AppleSystemUIFont, sans-serif; height:400vh;
@@ -60,8 +60,8 @@
 
 <script>
     const blocks = {
-        'blue': new ScrollWatcher(document.getElementById('blue')),
-        'red': new ScrollWatcher(document.getElementById('red')),
+        'blue': new ScrollSnooper(document.getElementById('blue')),
+        'red': new ScrollSnooper(document.getElementById('red')),
     };
 
     window.addEventListener('scroll', () => {

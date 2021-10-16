@@ -1,8 +1,8 @@
 /**!
- * Scroll Watcher v0.0.1
- * https://github.com/phucbm/scroll-watcher
+ * Scroll Snooper v0.0.1
+ * https://github.com/phucbm/scroll-snooper
  */
-class ScrollWatcher{
+class ScrollSnooper{
     constructor(element){
         this.element = element;
 
@@ -35,7 +35,7 @@ class ScrollWatcher{
         const offset = this.offset();
         const visible_bottom = Math.max(0, Math.min(offset.h, -1 * offset.top_bottom));
         const visible_top = Math.max(0, Math.min(offset.h, offset.bottom_top));
-        const pixel = Math.min(visible_bottom, visible_top, ScrollWatcher.viewport().h);
+        const pixel = Math.min(visible_bottom, visible_top, ScrollSnooper.viewport().h);
         const proportion = pixel / offset.h;
 
         return {pixel, proportion};
@@ -52,8 +52,8 @@ class ScrollWatcher{
         const h = this.element.offsetHeight;
 
         // distance from [anchor] of element to [anchor] of viewport
-        const top_top = y - ScrollWatcher.scroll().top;
-        const top_bottom = top_top - ScrollWatcher.viewport().h;
+        const top_top = y - ScrollSnooper.scroll().top;
+        const top_bottom = top_top - ScrollSnooper.viewport().h;
         const bottom_bottom = top_bottom + h;
         const bottom_top = top_top + h;
         const center_top = bottom_top - h * 0.5;
@@ -120,12 +120,12 @@ class ScrollWatcher{
         if(this.isInViewport()){
             if(!this.isEnter){
                 this.isEnter = true;
-                this.element.dispatchEvent(ScrollWatcher.onEnter);
+                this.element.dispatchEvent(ScrollSnooper.onEnter);
             }
         }else{
             if(this.isEnter){
                 this.isEnter = false;
-                this.element.dispatchEvent(ScrollWatcher.onExit);
+                this.element.dispatchEvent(ScrollSnooper.onExit);
             }
         }
 
@@ -133,11 +133,11 @@ class ScrollWatcher{
         if(this.visibility().proportion >= 1){
             if(!this.isEnterFull){
                 this.isEnterFull = true;
-                this.element.dispatchEvent(ScrollWatcher.onEnterFull);
+                this.element.dispatchEvent(ScrollSnooper.onEnterFull);
             }
         }else{
             if(this.isEnterFull){
-                this.element.dispatchEvent(ScrollWatcher.onExitPartial);
+                this.element.dispatchEvent(ScrollSnooper.onExitPartial);
                 this.isEnterFull = false;
             }
         }
