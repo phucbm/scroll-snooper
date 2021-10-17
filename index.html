@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scroll Snooper v0.0.1</title>
-    <script src="scroll-snooper.js"></script>
+    <title>Scroll Snooper v0.0.2</title>
+    <script src="scroll-snooper-new.js"></script>
     <style>
         body {
             font-family:AppleSystemUIFont, sans-serif; height:400vh;
@@ -31,7 +31,7 @@
         }
         .event {
             background:#eee; color:#000; padding:.1em .2em; border-radius:.2em;
-            font-size:.7em;
+            font-size:.6em;
         }
         .event.on {background:limegreen;}
     </style>
@@ -41,59 +41,58 @@
 <div class="stats blue" id="blue-stats">
     <div>isInViewport(<span contenteditable="true" id="blue_input">0</span>): <span id="blue_line_1">false</span></div>
     <div>visibility: <span id="blue_line_2"></span></div>
-    <div>events: <span class="event" id="blue_onEnter">enter</span>
-        <span class="event" id="blue_onEnterFull">enter:full</span>
-        <span class="event" id="blue_onExit">exit</span>
-        <span class="event" id="blue_onExitPartial">exit:partial</span></div>
+    <div>events: <span class="event" id="blue_onEnter">onEnter</span>
+        <span class="event" id="blue_onEnterFull">onEnterFull</span>
+        <span class="event" id="blue_onLeave">onLeave</span>
+        <span class="event" id="blue_onLeavePartial">onLeavePartial</span></div>
 </div>
 <div class="stats red" id="red-stats">
     <div>isInViewport(<span contenteditable="true" id="red_input">0</span>): <span id="red_line_1">false</span></div>
     <div>visibility: <span id="red_line_2"></span></div>
-    <div>events: <span class="event" id="red_onEnter">enter</span>
-        <span class="event" id="red_onEnterFull">enter:full</span>
-        <span class="event" id="red_onExit">exit</span>
-        <span class="event" id="red_onExitPartial">exit:partial</span></div>
+    <div>events: <span class="event" id="red_onEnter">onEnter</span>
+        <span class="event" id="red_onEnterFull">onEnterFull</span>
+        <span class="event" id="red_onLeave">onLeave</span>
+        <span class="event" id="red_onLeavePartial">onLeavePartial</span></div>
 </div>
 
 <div id="blue"></div>
 <div id="red"></div>
 
 <script>
-    const blocks = {
-        'blue': new ScrollSnooper(document.getElementById('blue')),
-        'red': new ScrollSnooper(document.getElementById('red')),
-    };
+    const blocks = ['blue', 'red'];
 
-    window.addEventListener('scroll', () => {
-        for(const block in blocks){
-            const scroll = blocks[block];
+    for(const block of blocks){
+        const element = document.getElementById(block);
+        // create scroll snooper
+        ScrollSnooper.create({
+            trigger: element,
+            onEnter: data => {
+                updateEvent(block, 'onEnter');
+            },
+            onEnterFull: data => {
+                updateEvent(block, 'onEnterFull');
+            },
+            onLeave: data => {
+                updateEvent(block, 'onLeave');
+            },
+            onLeavePartial: data => {
+                updateEvent(block, 'onLeavePartial');
+            },
+            onScroll: data => {
+                // isInViewport
+                const input = parseFloat(document.getElementById(`${block}_input`).innerText);
+                const isInViewport = data.isInViewport ? 'true' : 'false';
+                document.getElementById(`${block}_line_1`).innerText = `${isInViewport}`;
 
-            const input = parseFloat(document.getElementById(`${block}_input`).innerText);
-            const isInViewport = scroll.isInViewport(input) ? 'true' : 'false';
-            document.getElementById(`${block}_line_1`).innerText = `${isInViewport}`;
-
-            const proportion = scroll.visibility().proportion.toFixed(2);
-            const pixel = scroll.visibility().pixel;
-            document.getElementById(`${block}_line_2`).innerText = `${proportion} ${pixel}px`;
-        }
-    });
-
-    // events
-    for(const block in blocks){
-        blocks[block].on('enter', (data) => {
-            updateEvent(block, data.type);
-        });
-        blocks[block].on('enter:full', (data) => {
-            updateEvent(block, data.type);
-        });
-        blocks[block].on('exit', (data) => {
-            updateEvent(block, data.type);
-        });
-        blocks[block].on('exit:partial', (data) => {
-            updateEvent(block, data.type);
+                // visibility
+                const proportion = data.progress.toFixed(2);
+                const pixel = data.pixel;
+                document.getElementById(`${block}_line_2`).innerText = `${proportion} ${pixel}px`;
+            }
         });
     }
 
+    // events
     function updateEvent(block, event){
         document.getElementById(`${block}_${event}`).classList.add("on");
         setTimeout(() => {
