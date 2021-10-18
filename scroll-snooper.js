@@ -1,40 +1,8 @@
 /**!
- * Scroll Snooper v0.0.2
+ * Scroll Snooper v0.0.3
  * https://github.com/phucbm/scroll-snooper
  */
 ;(function(ScrollSnooper){
-    /**
-     * Private
-     * Element position
-     */
-    function position(element){
-        element = getElement(element);
-
-        const x = getOffset(element).left;
-        const y = getOffset(element).top;
-        const w = element.offsetWidth;
-        const h = element.offsetHeight;
-
-        // distance from [anchor] of element to [anchor] of viewport
-        const top_top = y - scroll().top;
-        const top_bottom = top_top - viewport().h;
-        const bottom_bottom = top_bottom + h;
-        const bottom_top = top_top + h;
-        const center_top = bottom_top - h * 0.5;
-        const center_bottom = top_bottom + h * 0.5;
-
-        return {
-            top_top,
-            top_bottom,
-            bottom_bottom,
-            bottom_top,
-            center_top,
-            center_bottom,
-            x, y, w, h,
-        };
-    }
-
-
     /**
      * Private
      * Viewport size
@@ -98,30 +66,55 @@
 
 
     /**
-     * Public
-     * Is In Viewport
-     * @param element
-     * @param proportion true if at least [n]% of the element is in the viewport
-     * @returns {boolean}
+     * Convert string to coordinate value
+     * todo: add more recognize string
+     * @param string
+     * @returns {{viewport, element}}
      */
-    ScrollSnooper.isInViewport = (element, proportion = 0) => {
-        return ScrollSnooper.visibility(element).progress >= proportion && ScrollSnooper.visibility(element).pixel > 0;
+    function getCoordinateFromString(string){
+        const positionStrings = {
+            top: 0,
+            center: 0.5,
+            bottom: 1
+        };
+        const element = positionStrings[string.split(' ')[0]];
+        const viewport = positionStrings[string.split(' ')[1]];
+
+        return {element, viewport};
     }
 
 
     /**
-     * Public
-     * Visibility
-     * @returns {{progress: number, pixel: number}}
+     * Distance from an anchor of element to an anchor of viewport
+     * @param element
+     * @param coordinateString
+     * @returns {number}
      */
-    ScrollSnooper.visibility = function(element){
-        const _position = position(element);
-        const visible_bottom = Math.max(0, Math.min(_position.h, -1 * _position.top_bottom));
-        const visible_top = Math.max(0, Math.min(_position.h, _position.bottom_top));
-        const pixel = Math.min(visible_bottom, visible_top, viewport().h);
-        const progress = pixel / _position.h;
+    function getDistance(element, coordinateString){
+        const coordinate = getCoordinateFromString(coordinateString);
+        const elementAnchor = getOffset(element).top + element.offsetHeight * coordinate.element;
+        const viewportAnchor = scroll().top + viewport().h * coordinate.viewport;
+        return elementAnchor - viewportAnchor;
+    }
 
-        return {pixel, progress};
+
+    /**
+     * Get element progress
+     * @param element
+     * @param coordinateStringStart
+     * @param coordinateStringEnd
+     * @param normalize
+     * @returns {number}
+     */
+    function getProgress(element, coordinateStringStart, coordinateStringEnd, normalize = true){
+        const distanceStart = getDistance(element, coordinateStringStart);
+        const distanceEnd = getDistance(element, coordinateStringEnd);
+        const max = distanceEnd - distanceStart;
+
+        if(normalize){
+            return Math.max(0, Math.min(1, distanceStart * -1 / max));
+        }
+        return distanceStart * -1 / max;
     }
 
 
@@ -153,13 +146,11 @@
 
         // on scroll
         window.addEventListener('scroll', (e) => {
-            const _isInViewport = ScrollSnooper.isInViewport(element);
-            const _visibility = ScrollSnooper.visibility(element);
+            const progress = getProgress(element, option.start, option.end);
             const _data = {
                 trigger: element,
-                progress: _visibility.progress,
-                pixel: _visibility.pixel,
-                isInViewport: _isInViewport,
+                progress: progress,
+                isInViewport: progress > 0,
                 timeStamp: e.timeStamp
             };
 
@@ -167,7 +158,7 @@
             option.onScroll(_data);
 
             // Event: enter, exit
-            if(_isInViewport){
+            if(progress > 0){
                 if(!isEnter){
                     isEnter = true;
                     option.onEnter(_data);
@@ -180,7 +171,7 @@
             }
 
             // Event: enterFull, exitPartial
-            if(_visibility.progress >= 1){
+            if(progress >= 1){
                 if(!isEnterFull){
                     isEnterFull = true;
                     option.onEnterFull(_data);
@@ -192,6 +183,22 @@
                 }
             }
         });
+    }
+
+
+    /**
+     * Public
+     * Is In Viewport
+     * @param element
+     * @param proportion returns true if at least [n]% of the element is in the viewport
+     * @returns {boolean}
+     */
+    ScrollSnooper.isInViewport = (element, proportion = 0) => {
+        const progress = getProgress(element, 'top bottom', 'bottom top', false);
+        const isInViewport = progress > 0 && progress <= 1;
+        const isValidProportion = progress >= proportion;
+
+        return isValidProportion && isInViewport;
     }
 
 })(window.ScrollSnooper = window.ScrollSnooper || {});

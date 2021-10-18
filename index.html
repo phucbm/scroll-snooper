@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scroll Snooper v0.0.2</title>
+    <title>Scroll Snooper v0.0.3</title>
     <script src="scroll-snooper.js"></script>
     <style>
         body {
@@ -11,7 +11,7 @@
             display:flex; align-items:center; justify-content:center;
         }
         .stats {
-            position:fixed; top:50%; z-index:2; width:40vw;
+            position:fixed; top:50%; z-index:2; width:30vw;
             transform:translateY(-50%);
             font-size:2vw; line-height:1.5;
         }
@@ -29,10 +29,8 @@
             content:"+"; position:absolute; top:50%; left:50%;
             transform:translate(-50%, -50%); font-size:3vw; color:#fff;
         }
-        .event {
-            background:#eee; color:#000; padding:.1em .2em; border-radius:.2em;
-            font-size:.6em;
-        }
+        .events {font-size:.6em;}
+        .event {background:#eee; color:#000; padding:.1em .2em; border-radius:.2em;}
         .event.on {background:limegreen;}
     </style>
 </head>
@@ -40,19 +38,29 @@
 
 <div class="stats blue" id="blue-stats">
     <div>isInViewport(<span contenteditable="true" id="blue_input">0</span>): <span id="blue_line_1">false</span></div>
-    <div>visibility: <span id="blue_line_2"></span></div>
-    <div>events: <span class="event" id="blue_onEnter">onEnter</span>
-        <span class="event" id="blue_onEnterFull">onEnterFull</span>
-        <span class="event" id="blue_onLeave">onLeave</span>
-        <span class="event" id="blue_onLeavePartial">onLeavePartial</span></div>
+    <div>progress: <span id="blue_line_2"></span></div>
+    <div>events:
+        <div class="events">
+            <span class="event" id="blue_onScroll">onScroll</span>
+            <span class="event" id="blue_onEnter">onEnter</span>
+            <span class="event" id="blue_onEnterFull">onEnterFull</span>
+            <span class="event" id="blue_onLeave">onLeave</span>
+            <span class="event" id="blue_onLeavePartial">onLeavePartial</span>
+        </div>
+    </div>
 </div>
 <div class="stats red" id="red-stats">
     <div>isInViewport(<span contenteditable="true" id="red_input">0</span>): <span id="red_line_1">false</span></div>
-    <div>visibility: <span id="red_line_2"></span></div>
-    <div>events: <span class="event" id="red_onEnter">onEnter</span>
-        <span class="event" id="red_onEnterFull">onEnterFull</span>
-        <span class="event" id="red_onLeave">onLeave</span>
-        <span class="event" id="red_onLeavePartial">onLeavePartial</span></div>
+    <div>progress: <span id="red_line_2"></span></div>
+    <div>events:
+        <div class="events">
+            <span class="event" id="red_onScroll">onScroll</span>
+            <span class="event" id="red_onEnter">onEnter</span>
+            <span class="event" id="red_onEnterFull">onEnterFull</span>
+            <span class="event" id="red_onLeave">onLeave</span>
+            <span class="event" id="red_onLeavePartial">onLeavePartial</span>
+        </div>
+    </div>
 </div>
 
 <div id="blue"></div>
@@ -66,6 +74,8 @@
         // create scroll snooper
         ScrollSnooper.create({
             trigger: element,
+            start: 'top bottom',
+            end: 'bottom top',
             onEnter: data => {
                 updateEvent(block, 'onEnter');
             },
@@ -79,15 +89,16 @@
                 updateEvent(block, 'onLeavePartial');
             },
             onScroll: data => {
+                updateEvent(block, 'onScroll');
+
                 // isInViewport
                 const input = parseFloat(document.getElementById(`${block}_input`).innerText);
-                const isInViewport = data.isInViewport ? 'true' : 'false';
+                const isInViewport = ScrollSnooper.isInViewport(data.trigger, input) ? 'true' : 'false';
                 document.getElementById(`${block}_line_1`).innerText = `${isInViewport}`;
 
                 // visibility
-                const proportion = data.progress.toFixed(2);
-                const pixel = data.pixel;
-                document.getElementById(`${block}_line_2`).innerText = `${proportion} ${pixel}px`;
+                const progress = data.progress.toFixed(2);
+                document.getElementById(`${block}_line_2`).innerText = `${progress}`;
             }
         });
     }
@@ -97,7 +108,7 @@
         document.getElementById(`${block}_${event}`).classList.add("on");
         setTimeout(() => {
             document.getElementById(`${block}_${event}`).classList.remove("on");
-        }, 1000);
+        }, 500);
     }
 
 </script>
