@@ -1,15 +1,17 @@
 /**!
- * Scroll Snooper v0.0.2
+ * Scroll Snooper v0.0.3
  * https://github.com/phucbm/scroll-snooper
  */
 ;(function(ScrollSnooper){
     /**
      * Private
-     * Element offset
+     * Element position
      */
-    function offset(element){
-        const x = element.offsetLeft;
-        const y = element.offsetTop;
+    function position(element){
+        element = getElement(element);
+
+        const x = getOffset(element).left;
+        const y = getOffset(element).top;
         const w = element.offsetWidth;
         const h = element.offsetHeight;
 
@@ -31,6 +33,7 @@
             x, y, w, h,
         };
     }
+
 
     /**
      * Private
@@ -59,6 +62,42 @@
 
 
     /**
+     * Get element
+     * Compatible with jQuery
+     * @param element
+     * @returns {*}
+     */
+    function getElement(element){
+        // is jQuery element
+        if(typeof jQuery !== 'undefined' && element instanceof jQuery){
+            return element.get()[0];
+        }
+
+        return element;
+    }
+
+
+    /**
+     * Get element offset
+     * https://github.com/jquery/jquery/blob/d0ce00cdfa680f1f0c38460bc51ea14079ae8b07/src/offset.js#L87
+     * @param element
+     * @returns {{top: *, left: *}|{top: number, left: number}}
+     */
+    function getOffset(element){
+        if(!element.getClientRects().length){
+            return {top: 0, left: 0};
+        }
+
+        const rect = element.getBoundingClientRect();
+        const win = element.ownerDocument.defaultView;
+        return {
+            top: rect.top + win.pageYOffset,
+            left: rect.left + win.pageXOffset
+        };
+    }
+
+
+    /**
      * Public
      * Is In Viewport
      * @param element
@@ -76,11 +115,11 @@
      * @returns {{progress: number, pixel: number}}
      */
     ScrollSnooper.visibility = function(element){
-        const _offset = offset(element);
-        const visible_bottom = Math.max(0, Math.min(_offset.h, -1 * _offset.top_bottom));
-        const visible_top = Math.max(0, Math.min(_offset.h, _offset.bottom_top));
+        const _position = position(element);
+        const visible_bottom = Math.max(0, Math.min(_position.h, -1 * _position.top_bottom));
+        const visible_top = Math.max(0, Math.min(_position.h, _position.bottom_top));
         const pixel = Math.min(visible_bottom, visible_top, viewport().h);
-        const progress = pixel / _offset.h;
+        const progress = pixel / _position.h;
 
         return {pixel, progress};
     }
@@ -110,13 +149,14 @@
             }, ...config
         };
         let isEnter = false, isEnterFull = false;
+        const element = getElement(option.trigger);
 
         // on scroll
         window.addEventListener('scroll', (e) => {
-            const _isInViewport = ScrollSnooper.isInViewport(option.trigger);
-            const _visibility = ScrollSnooper.visibility(option.trigger);
+            const _isInViewport = ScrollSnooper.isInViewport(element);
+            const _visibility = ScrollSnooper.visibility(element);
             const _data = {
-                trigger: option.trigger,
+                trigger: element,
                 progress: _visibility.progress,
                 pixel: _visibility.pixel,
                 isInViewport: _isInViewport,
