@@ -133,10 +133,6 @@
                 },
                 onLeave: data => {
                 },
-                onEnterFull: data => {
-                },
-                onLeavePartial: data => {
-                },
                 onScroll: data => {
                 }
             }, ...config
@@ -158,7 +154,7 @@
             option.onScroll(_data);
 
             // Event: enter, exit
-            if(progress > 0){
+            if(progress > 0 && progress <= 1){
                 if(!isEnter){
                     isEnter = true;
                     option.onEnter(_data);
@@ -167,19 +163,6 @@
                 if(isEnter){
                     isEnter = false;
                     option.onLeave(_data);
-                }
-            }
-
-            // Event: enterFull, exitPartial
-            if(progress >= 1){
-                if(!isEnterFull){
-                    isEnterFull = true;
-                    option.onEnterFull(_data);
-                }
-            }else{
-                if(isEnterFull){
-                    isEnterFull = false;
-                    option.onLeavePartial(_data);
                 }
             }
         });
@@ -194,7 +177,7 @@
      * @returns {boolean}
      */
     ScrollSnooper.isInViewport = (element, proportion = 0) => {
-        const progress = getProgress(element, 'top bottom', 'bottom top', false);
+        const progress = getProgress(getElement(element), 'top bottom', 'bottom top');
         const isInViewport = progress > 0 && progress <= 1;
         const isValidProportion = progress >= proportion;
 

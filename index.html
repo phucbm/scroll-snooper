@@ -43,9 +43,7 @@
         <div class="events">
             <span class="event" id="blue_onScroll">onScroll</span>
             <span class="event" id="blue_onEnter">onEnter</span>
-            <span class="event" id="blue_onEnterFull">onEnterFull</span>
             <span class="event" id="blue_onLeave">onLeave</span>
-            <span class="event" id="blue_onLeavePartial">onLeavePartial</span>
         </div>
     </div>
 </div>
@@ -56,9 +54,7 @@
         <div class="events">
             <span class="event" id="red_onScroll">onScroll</span>
             <span class="event" id="red_onEnter">onEnter</span>
-            <span class="event" id="red_onEnterFull">onEnterFull</span>
             <span class="event" id="red_onLeave">onLeave</span>
-            <span class="event" id="red_onLeavePartial">onLeavePartial</span>
         </div>
     </div>
 </div>
@@ -75,18 +71,12 @@
         ScrollSnooper.create({
             trigger: element,
             start: 'top bottom',
-            end: 'bottom top',
+            end: 'bottom bottom',
             onEnter: data => {
                 updateEvent(block, 'onEnter');
             },
-            onEnterFull: data => {
-                updateEvent(block, 'onEnterFull');
-            },
             onLeave: data => {
                 updateEvent(block, 'onLeave');
-            },
-            onLeavePartial: data => {
-                updateEvent(block, 'onLeavePartial');
             },
             onScroll: data => {
                 updateEvent(block, 'onScroll');
