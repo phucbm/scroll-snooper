@@ -103,18 +103,12 @@
      * @param element
      * @param coordinateStringStart
      * @param coordinateStringEnd
-     * @param normalize
      * @returns {number}
      */
-    function getProgress(element, coordinateStringStart, coordinateStringEnd, normalize = true){
+    function getProgress(element, coordinateStringStart, coordinateStringEnd){
         const distanceStart = getDistance(element, coordinateStringStart);
         const distanceEnd = getDistance(element, coordinateStringEnd);
-        const max = distanceEnd - distanceStart;
-
-        if(normalize){
-            return Math.max(0, Math.min(1, distanceStart * -1 / max));
-        }
-        return distanceStart * -1 / max;
+        return distanceStart * -1 / (distanceEnd - distanceStart);
     }
 
 
