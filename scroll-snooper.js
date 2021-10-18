@@ -1,5 +1,5 @@
 /**!
- * Scroll Snooper v0.0.3
+ * Scroll Snooper v0.0.2
  * https://github.com/phucbm/scroll-snooper
  */
 ;(function(ScrollSnooper){
