@@ -67,7 +67,6 @@
 
     /**
      * Convert string to coordinate value
-     * todo: add more recognize string
      * @param string
      * @returns {{viewport, element}}
      */
@@ -134,14 +133,15 @@
         let isEnter = false, isEnterFull = false;
         const element = getElement(option.trigger);
 
-        // on scroll
-        window.addEventListener('scroll', (e) => {
+        // function update
+        const update = (e) => {
             const progress = getProgress(element, option.start, option.end);
             const _data = {
                 trigger: element,
                 progress: progress,
                 isInViewport: progress > 0,
-                timeStamp: e.timeStamp
+                timeStamp: e.timeStamp,
+                type: e.type
             };
 
             // Event: scroll
@@ -159,7 +159,11 @@
                     option.onLeave(_data);
                 }
             }
-        });
+        };
+
+        // trigger update
+        window.addEventListener('load', e => update(e));
+        window.addEventListener('scroll', e => update(e));
     }
 
 
