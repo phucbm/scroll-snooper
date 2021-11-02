@@ -1,5 +1,5 @@
 /**!
- * Scroll Snooper v0.0.3
+ * Scroll Snooper v0.0.4
  * https://github.com/phucbm/scroll-snooper
  */
 ;(function(ScrollSnooper){
@@ -46,7 +46,7 @@
 
 
     /**
-     * Get element offset
+     * Get element offsets
      * https://github.com/jquery/jquery/blob/d0ce00cdfa680f1f0c38460bc51ea14079ae8b07/src/offset.js#L87
      * @param element
      * @returns {{top: *, left: *}|{top: number, left: number}}
@@ -61,6 +61,37 @@
         return {
             top: rect.top + win.pageYOffset,
             left: rect.left + win.pageXOffset
+        };
+    }
+
+
+    /**
+     * Get element relative offsets
+     * @param element
+     * @returns {{top_bottom: number, center_bottom: number, w: number, top_top: number, x: number, h: number, y: number, bottom_top: number, center_top: number, bottom_bottom: number}}
+     */
+    function getRelativeOffset(element){
+        const x = element.offsetLeft;
+        const y = element.offsetTop;
+        const offsetWidth = element.offsetWidth;
+        const offsetHeight = element.offsetHeight;
+
+        // distance from [anchor] of element to [anchor] of viewport
+        const top_top = y - scroll().top;
+        const top_bottom = top_top - viewport().h;
+        const bottom_bottom = top_bottom + offsetHeight;
+        const bottom_top = top_top + offsetHeight;
+        const center_top = bottom_top - offsetHeight * 0.5;
+        const center_bottom = top_bottom + offsetHeight * 0.5;
+
+        return {
+            top_top,
+            top_bottom,
+            bottom_bottom,
+            bottom_top,
+            center_top,
+            center_bottom,
+            x, y, offsetWidth, offsetHeight,
         };
     }
 
@@ -177,9 +208,28 @@
     ScrollSnooper.isInViewport = (element, proportion = 0) => {
         const progress = getProgress(getElement(element), 'top bottom', 'bottom top');
         const isInViewport = progress > 0 && progress <= 1;
-        const isValidProportion = progress >= proportion;
+        const isValidProportion = ScrollSnooper.visibility(element).proportion >= proportion;
 
         return isValidProportion && isInViewport;
     }
+
+
+    /**
+     * Public
+     * Get element's visibility
+     * @param element
+     * @returns {{proportion: number, pixel: number}}
+     */
+    ScrollSnooper.visibility = (element) => {
+        element = getElement(element);
+        const offset = getRelativeOffset(element);
+
+        const visible_bottom = Math.max(0, Math.min(element.offsetHeight, -1 * offset.top_bottom));
+        const visible_top = Math.max(0, Math.min(element.offsetHeight, offset.bottom_top));
+        const pixel = Math.min(visible_bottom, visible_top, viewport().h);
+        const proportion = pixel / element.offsetHeight;
+
+        return {pixel, proportion};
+    };
 
 })(window.ScrollSnooper = window.ScrollSnooper || {});
