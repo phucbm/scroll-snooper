@@ -102,9 +102,7 @@ ScrollSnooper.create({
 | Name | Type | Default | Note |
 | --- | --- | --- | --- |
 | trigger | jQuery, HTMLElement  | `undefined`  | Element(s).   |
-| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom
-of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the
-viewport"_. For now, we have 3 positions: top, center and bottom.  |
+| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the viewport"_. For now, we have 3 positions: top, center and bottom.  |
 | end | string  | `bottom top`  | Ending position.  |
 | onEnter | function  | data => {}  | A callback for when the trigger is scrolled into view.  |
 | onLeave | function  | data => {}  | A callback for when the trigger is scrolled out of view.  |
