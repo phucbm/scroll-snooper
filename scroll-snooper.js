@@ -1,5 +1,5 @@
 /**!
- * Scroll Snooper v0.0.4
+ * Scroll Snooper v1.0.0
  * https://github.com/phucbm/scroll-snooper
  */
 ;(function(ScrollSnooper){
@@ -30,14 +30,24 @@
 
 
     /**
+     * Is jQuery element
+     * @param element
+     * @returns {boolean}
+     */
+    function isjQueryElement(element){
+        return typeof jQuery !== 'undefined' && element instanceof jQuery;
+    }
+
+
+    /**
      * Get element
      * Compatible with jQuery
      * @param element
      * @returns {*}
      */
-    function getElement(element){
+    function getElement(element = undefined){
         // is jQuery element
-        if(typeof jQuery !== 'undefined' && element instanceof jQuery){
+        if(isjQueryElement(element)){
             return element.get()[0];
         }
 
@@ -71,13 +81,13 @@
      * @returns {{top_bottom: number, center_bottom: number, w: number, top_top: number, x: number, h: number, y: number, bottom_top: number, center_top: number, bottom_bottom: number}}
      */
     function getRelativeOffset(element){
-        const x = element.offsetLeft;
-        const y = element.offsetTop;
+        const left = getOffset(element).left;
+        const top = getOffset(element).top;
         const offsetWidth = element.offsetWidth;
         const offsetHeight = element.offsetHeight;
 
         // distance from [anchor] of element to [anchor] of viewport
-        const top_top = y - scroll().top;
+        const top_top = top - scroll().top;
         const top_bottom = top_top - viewport().h;
         const bottom_bottom = top_bottom + offsetHeight;
         const bottom_top = top_top + offsetHeight;
@@ -91,7 +101,7 @@
             bottom_top,
             center_top,
             center_bottom,
-            x, y, offsetWidth, offsetHeight,
+            left, top, offsetWidth, offsetHeight,
         };
     }
 
@@ -136,65 +146,11 @@
      * @returns {number}
      */
     function getProgress(element, coordinateStringStart, coordinateStringEnd){
+        if(typeof element === 'undefined') return 0;
+
         const distanceStart = getDistance(element, coordinateStringStart);
         const distanceEnd = getDistance(element, coordinateStringEnd);
         return distanceStart * -1 / (distanceEnd - distanceStart);
-    }
-
-
-    /**
-     * Public
-     * Create
-     * @param config
-     */
-    ScrollSnooper.create = (config) => {
-        const option = {
-            ...{
-                trigger: '',
-                start: 'top bottom',
-                end: 'bottom top',
-                onEnter: data => {
-                },
-                onLeave: data => {
-                },
-                onScroll: data => {
-                }
-            }, ...config
-        };
-        let isEnter = false, isEnterFull = false;
-        const element = getElement(option.trigger);
-
-        // function update
-        const update = (e) => {
-            const progress = getProgress(element, option.start, option.end);
-            const _data = {
-                trigger: element,
-                progress: progress,
-                isInViewport: progress > 0,
-                timeStamp: e.timeStamp,
-                type: e.type
-            };
-
-            // Event: scroll
-            option.onScroll(_data);
-
-            // Event: enter, exit
-            if(progress > 0 && progress <= 1){
-                if(!isEnter){
-                    isEnter = true;
-                    option.onEnter(_data);
-                }
-            }else{
-                if(isEnter){
-                    isEnter = false;
-                    option.onLeave(_data);
-                }
-            }
-        };
-
-        // trigger update
-        window.addEventListener('load', e => update(e));
-        window.addEventListener('scroll', e => update(e));
     }
 
 
@@ -220,7 +176,7 @@
      * @param element
      * @returns {{proportion: number, pixel: number}}
      */
-    ScrollSnooper.visibility = (element) => {
+    ScrollSnooper.visibility = element => {
         element = getElement(element);
         const offset = getRelativeOffset(element);
 
@@ -231,5 +187,123 @@
 
         return {pixel, proportion};
     };
+
+
+    /**
+     * Get the most visible element
+     * @param elements
+     * @param atLeastPixel
+     * @returns {*&{el: (*|jQuery|HTMLElement)}}
+     */
+    ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
+        let mostVisibleElement = undefined, maxVisibility = {pixel: 0},
+            isFound = false,
+            index = 0, maxIndex = undefined;
+        for(const element of elements){
+            const visibility = ScrollSnooper.visibility(element);
+            if(visibility.pixel >= atLeastPixel && visibility.pixel > maxVisibility.pixel){
+                maxVisibility = visibility;
+                mostVisibleElement = element;
+                maxIndex = index;
+                isFound = true;
+            }
+            index++;
+        }
+        if(typeof jQuery !== 'undefined' && isFound){
+            mostVisibleElement = isjQueryElement(mostVisibleElement) ? mostVisibleElement : jQuery(mostVisibleElement)
+        }
+        return {
+            isFound, index: maxIndex,
+            el: mostVisibleElement,
+            ...maxVisibility
+        };
+    };
+
+
+    /**
+     * Public
+     * Create
+     * @param config
+     */
+    ScrollSnooper.create = (config) => {
+        const option = {
+            ...{
+                trigger: undefined,
+                start: 'top bottom',
+                end: 'bottom top',
+                visibility: false, // Get visibility value
+                onEnter: data => {
+                },
+                onLeave: data => {
+                },
+                onScroll: data => {
+                },
+                // Get the most visible
+                isGetTheMostVisible: false,
+                atLeastPixel: 0,
+                onChange: data => {
+                },
+                onFound: data => {
+                },
+            }, ...config
+        };
+        let isEnter = false, lastMostVisible = undefined;
+        const element = getElement(option.trigger);
+
+        // function update
+        const update = (e) => {
+            const progress = getProgress(element, option.start, option.end);
+            let _data = {
+                trigger: element,
+                progress: progress,
+                isInViewport: progress > 0,
+                timeStamp: e.timeStamp,
+                type: e.type
+            };
+
+            // Get visibility value
+            if(option.visibility){
+                _data = {..._data, visibility: ScrollSnooper.visibility(element)};
+            }
+
+            // Event: scroll
+            option.onScroll(_data);
+
+            // Event: enter, exit
+            if(progress > 0 && progress <= 1){
+                if(!isEnter){
+                    isEnter = true;
+                    option.onEnter(_data);
+                }
+            }else{
+                if(isEnter){
+                    isEnter = false;
+                    option.onLeave(_data);
+                }
+            }
+
+            // Feature: Get the most visible
+            if(option.isGetTheMostVisible){
+                const newVisible = ScrollSnooper.getTheMostVisible(option.trigger, option.atLeastPixel);
+
+                if(typeof lastMostVisible === 'undefined' || newVisible.index !== lastMostVisible.index){
+                    lastMostVisible = newVisible;
+
+                    // Event: change visible element
+                    option.onChange({..._data, mostVisible: newVisible});
+
+                    // Event: found new visible element
+                    if(newVisible.isFound){
+                        option.onFound({..._data, mostVisible: newVisible});
+                    }
+                }
+            }
+        };
+
+        // trigger update
+        window.addEventListener('load', e => update(e));
+        window.addEventListener('scroll', e => update(e));
+        window.addEventListener('resize', e => update(e));
+    }
 
 })(window.ScrollSnooper = window.ScrollSnooper || {});

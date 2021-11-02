@@ -1,3 +1,3 @@
-# Scroll Snooper v0.0.4
+# Scroll Snooper v1.0.0
 
 > 🛼 Pure JavaScript API that goes snooping around elements while scrolling
