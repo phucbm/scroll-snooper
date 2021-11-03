@@ -8,10 +8,9 @@
    <img src="https://img.shields.io/badge/-Demo-0273A9">
    </a>
 <a href="https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper">
-   <img src="https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge">
+   <img src="https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge?style=rounded">
    </a>
  </div>
-
 
 > 🛼 Pure JavaScript API that goes snooping around elements while scrolling
 
