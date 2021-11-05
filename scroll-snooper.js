@@ -5,7 +5,6 @@
  */
 ;(function(ScrollSnooper){
     /**
-     * Private
      * Viewport size
      * @returns {{w: number, h: number}}
      */
@@ -18,7 +17,6 @@
 
 
     /**
-     * Private
      * Scroll position
      * @returns {{top: number, left: number}}
      */
@@ -32,7 +30,7 @@
 
     /**
      * Is jQuery element
-     * @param element
+     * @param element : HTMLElement
      * @returns {boolean}
      */
     function isjQueryElement(element){
@@ -43,7 +41,7 @@
     /**
      * Get element
      * Compatible with jQuery
-     * @param element
+     * @param element : HTMLElement
      * @returns {*}
      */
     function getElement(element = undefined){
@@ -59,7 +57,7 @@
     /**
      * Get element offsets
      * https://github.com/jquery/jquery/blob/d0ce00cdfa680f1f0c38460bc51ea14079ae8b07/src/offset.js#L87
-     * @param element
+     * @param element : HTMLElement
      * @returns {{top: *, left: *}|{top: number, left: number}}
      */
     function getOffset(element){
@@ -78,7 +76,7 @@
 
     /**
      * Get element relative offsets
-     * @param element
+     * @param element : HTMLElement
      * @returns {{top_bottom: number, center_bottom: number, w: number, top_top: number, x: number, h: number, y: number, bottom_top: number, center_top: number, bottom_bottom: number}}
      */
     function getRelativeOffset(element){
@@ -109,7 +107,7 @@
 
     /**
      * Convert string to coordinate value
-     * @param string
+     * @param string : string | "top bottom"
      * @returns {{viewport, element}}
      */
     function getCoordinateFromString(string){
@@ -127,8 +125,8 @@
 
     /**
      * Distance from an anchor of element to an anchor of viewport
-     * @param element
-     * @param coordinateString
+     * @param element : HTMLElement
+     * @param coordinateString : string | "top bottom"
      * @returns {number}
      */
     function getDistance(element, coordinateString){
@@ -141,9 +139,9 @@
 
     /**
      * Get element progress
-     * @param element
-     * @param coordinateStringStart
-     * @param coordinateStringEnd
+     * @param element : HTMLElement
+     * @param coordinateStringStart : string | "top bottom"
+     * @param coordinateStringEnd : string | "top bottom"
      * @returns {number}
      */
     function getProgress(element, coordinateStringStart, coordinateStringEnd){
@@ -156,10 +154,9 @@
 
 
     /**
-     * Public
      * Is In Viewport
-     * @param element
-     * @param proportion returns true if at least [n]% of the element is in the viewport
+     * @param element : HTMLElement
+     * @param proportion :number | returns true if at least [n]% of the element is in the viewport
      * @returns {boolean}
      */
     ScrollSnooper.isInViewport = (element, proportion = 0) => {
@@ -172,9 +169,8 @@
 
 
     /**
-     * Public
      * Get element's visibility
-     * @param element
+     * @param element : HTMLElement
      * @returns {{proportion: number, pixel: number}}
      */
     ScrollSnooper.visibility = element => {
@@ -192,8 +188,8 @@
 
     /**
      * Get the most visible element
-     * @param elements
-     * @param atLeastPixel
+     * @param elements : HTMLElement
+     * @param atLeastPixel : number
      * @returns {*&{el: (*|jQuery|HTMLElement)}}
      */
     ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
@@ -222,9 +218,8 @@
 
 
     /**
-     * Public
      * Create
-     * @param config
+     * @param config : object
      */
     ScrollSnooper.create = (config) => {
         const option = {
