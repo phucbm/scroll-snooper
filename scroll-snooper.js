@@ -106,18 +106,36 @@
 
 
     /**
-     * Convert string to coordinate value
-     * @param string : string | "top bottom"
-     * @returns {{viewport, element}}
+     * Get position from string
+     * @param string : string
+     * @returns {number|*}
      */
-    function getCoordinateFromString(string){
+    function getPositionFromString(string){
         const positionStrings = {
             top: 0,
             center: 0.5,
             bottom: 1
         };
-        const element = positionStrings[string.split(' ')[0]];
-        const viewport = positionStrings[string.split(' ')[1]];
+        let position = positionStrings[string];
+
+        if(typeof position === 'number') return position;
+
+        // percentage
+        if(string.includes('%')) return parseInt(string) / 100;
+
+        return position;
+    }
+
+
+    /**
+     * Convert string to coordinate value
+     * @param string : string | "top bottom"
+     * @returns {{viewport, element}}
+     */
+    function getCoordinateFromString(string){
+        const split = string.split(' ');
+        const element = getPositionFromString(split[0]);
+        const viewport = getPositionFromString(split[1]);
 
         return {element, viewport};
     }
