@@ -1,5 +1,5 @@
 /**!
- * Scroll Snooper v1.0.0
+ * Scroll Snooper v1.1.0
  * https://github.com/phucbm/scroll-snooper
  * MIT License - Copyright (c) 2021 Minh-Phuc Bui
  */

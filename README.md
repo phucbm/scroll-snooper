@@ -1,8 +1,8 @@
-# Scroll Snooper v1.0.0
+# Scroll Snooper v1.1.0
 
 <div>
 <span>
-   <img src="https://img.shields.io/badge/Version-v1.0.0-0088ff">
+   <img src="https://img.shields.io/badge/Version-v1.1.0-0088ff">
    </span>
  <a href="https://phucbm.github.io/scroll-snooper/">
    <img src="https://img.shields.io/badge/-Demo-0273A9">
