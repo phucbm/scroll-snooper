@@ -72,8 +72,9 @@
         // create scroll snooper
         ScrollSnooper.create({
             trigger: element,
-            start: 'top 120%',
-            end: 'bottom 20%',
+            start: 'top bottom',
+            end: 'bottom top',
+            markers: true,
             onEnter: data => {
                 updateEvent(block, 'onEnter');
             },
