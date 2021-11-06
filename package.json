@@ -1,0 +1,29 @@
+{
+  "name": "scroll-snooper",
+  "version": "1.1.0",
+  "description": "Pure JavaScript API that goes snooping around elements while scrolling",
+  "main": "scroll-snooper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phucbm/scroll-snooper.git"
+  },
+  "keywords": [
+    "scroll-snooper",
+    "scroll-watcher",
+    "scroll-monitor"
+  ],
+  "author": "phucbm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phucbm/scroll-snooper/issues"
+  },
+  "homepage": "https://github.com/phucbm/scroll-snooper#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-uglify": "^3.0.2"
+  }
+}
