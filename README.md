@@ -1,16 +1,10 @@
 # Scroll Snooper v1.1.0
 
-<div>
-<span>
-   <img src="https://img.shields.io/badge/Version-v1.1.0-0088ff">
-   </span>
- <a href="https://phucbm.github.io/scroll-snooper/">
-   <img src="https://img.shields.io/badge/-Demo-0273A9">
-   </a>
-<a href="https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper">
-   <img src="https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge?style=rounded">
-   </a>
- </div>
+[![release](https://badgen.net/github/release/phucbm/scroll-snooper/)](https://github.com/phucbm/scroll-snooper/releases/latest)
+[![license](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
+[![license](https://badgen.net/github/license/phucbm/scroll-snooper/)](https://github.com/donmccurdy/three-pathfinding/blob/master/LICENSE)
+[![jsdelivr](https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge?style=rounded)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
+
 
 > 🛼 Pure JavaScript API that goes snooping around elements while scrolling
 
