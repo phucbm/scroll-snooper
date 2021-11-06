@@ -106,18 +106,36 @@
 
 
     /**
-     * Convert string to coordinate value
-     * @param string : string | "top bottom"
-     * @returns {{viewport, element}}
+     * Get position from string
+     * @param string : string
+     * @returns {number|*}
      */
-    function getCoordinateFromString(string){
+    function getPositionFromString(string){
         const positionStrings = {
             top: 0,
             center: 0.5,
             bottom: 1
         };
-        const element = positionStrings[string.split(' ')[0]];
-        const viewport = positionStrings[string.split(' ')[1]];
+        let position = positionStrings[string];
+
+        if(typeof position === 'number') return position;
+
+        // percentage
+        if(string.includes('%')) return parseInt(string) / 100;
+
+        return position;
+    }
+
+
+    /**
+     * Convert string to coordinate value
+     * @param string : string | "top bottom"
+     * @returns {{viewport, element}}
+     */
+    function getCoordinateFromString(string){
+        const split = string.split(' ');
+        const element = getPositionFromString(split[0]);
+        const viewport = getPositionFromString(split[1]);
 
         return {element, viewport};
     }
@@ -150,6 +168,42 @@
         const distanceStart = getDistance(element, coordinateStringStart);
         const distanceEnd = getDistance(element, coordinateStringEnd);
         return distanceStart * -1 / (distanceEnd - distanceStart);
+    }
+
+
+    /**
+     * Create marker element
+     * @param isViewport : boolean
+     * @param isStart : boolean
+     * @param viewportPosition
+     * @returns {HTMLDivElement}
+     */
+    function createMarker(isViewport = true, isStart = true, viewportPosition = 0){
+        // create element
+        const markerElement = document.createElement('div');
+
+        // add style
+        const color = isStart ? '#6495edff' : '#dc143cff';
+        markerElement.style.cssText = 'right:0; z-index:99999; width:40px; height:0; pointer-events:none; font-size:14px;';
+        markerElement.style.position = isViewport ? 'fixed' : 'absolute';
+        markerElement.style.backgroundColor = !isViewport && isStart ? 'rgba(100,149,237,0.1)' : '';
+        markerElement.style.color = color;
+        markerElement.style.borderTop = `1px solid ${color}`;
+
+        // append to body
+        document.body.appendChild(markerElement);
+
+        // add label
+        const label = document.createElement('span');
+        label.innerText = isStart ? 'start' : 'end';
+        markerElement.appendChild(label);
+
+        // align label in viewport
+        if(isViewport && viewportPosition > 0.9 || !isViewport && !isStart){
+            label.style.cssText = 'position:absolute; bottom:0; left:0;';
+        }
+
+        return markerElement;
     }
 
 
@@ -228,6 +282,7 @@
                 start: 'top bottom',
                 end: 'bottom top',
                 visibility: false, // Get visibility value
+                markers: false,
                 onEnter: data => {
                 },
                 onLeave: data => {
@@ -246,6 +301,25 @@
         let isEnter = false, lastMostVisible = undefined;
         const element = getElement(option.trigger);
 
+        // create markers
+        const markers = {};
+        if(option.markers){
+            markers.start = getCoordinateFromString(option.start);
+            markers.end = getCoordinateFromString(option.end);
+
+            // viewport start
+            markers.viewportStart = createMarker(true, true, markers.start.viewport);
+            markers.viewportStart.style.top = `${markers.start.viewport * 100}%`;
+
+            // viewport end
+            markers.viewportEnd = createMarker(true, false, markers.end.viewport);
+            markers.viewportEnd.style.top = `${markers.end.viewport * 100}%`;
+
+            // element start/end
+            markers.elementStart = createMarker(false, true);
+            markers.elementEnd = createMarker(false, false);
+        }
+
         // function update
         const update = (e) => {
             const progress = getProgress(element, option.start, option.end);
@@ -256,6 +330,20 @@
                 timeStamp: e.timeStamp,
                 type: e.type
             };
+
+            // Update markers
+            if(option.markers){
+                const offsetTop = getOffset(element).top;
+                const startOffset = element.offsetHeight * markers.start.element;
+                const endOffset = element.offsetHeight * markers.end.element;
+
+                // element milestone
+                markers.elementStart.style.top = `${offsetTop + startOffset}px`;
+                markers.elementEnd.style.top = `${offsetTop + endOffset}px`;
+
+                // element range
+                markers.elementStart.style.height = `${endOffset - startOffset}px`;
+            }
 
             // Get visibility value
             if(option.visibility){
