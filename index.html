@@ -5,108 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scroll Snooper v1.1.0</title>
     <script src="scroll-snooper.js"></script>
-    <style>
-        body {
-            font-family:AppleSystemUIFont, sans-serif; height:400vh;
-            display:flex; align-items:center; justify-content:center;
-        }
-        .stats {
-            position:fixed; top:50%; z-index:2; width:30vw;
-            transform:translateY(-50%);
-            font-size:2vw; line-height:1.5;
-        }
-        .stats.blue {color:cornflowerblue; left:3vw;}
-        .stats.red {color:crimson; right:3vw; text-align:right;}
-        #blue {
-            width:10vw; height:10vw; border-radius:1vw; margin:0 5px;
-            background:cornflowerblue; position:relative;
-        }
-        #red {
-            width:10vw; height:120vh; border-radius:1vw; margin:0 5px;
-            background:crimson; position:relative;
-        }
-        #blue:before, #red:before {
-            content:"+"; position:absolute; top:50%; left:50%;
-            transform:translate(-50%, -50%); font-size:3vw; color:#fff;
-        }
-        .events {font-size:.6em;}
-        .event {background:#eee; color:#000; padding:.1em .2em; border-radius:.2em;}
-        .event.on {background:limegreen;}
-    </style>
+    <link rel="icon" type="image/png" href="assets/logo.png"/>
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 
-<div class="stats blue" id="blue-stats">
-    <div>isInViewport(<span contenteditable="true" id="blue_input">0</span>): <span id="blue_line_1">false</span></div>
-    <div>progress: <span id="blue_line_2"></span></div>
-    <div>visibility: <span id="blue_line_3"></span></div>
-    <div>events:
-        <div class="events">
-            <span class="event" id="blue_onScroll">onScroll</span>
-            <span class="event" id="blue_onEnter">onEnter</span>
-            <span class="event" id="blue_onLeave">onLeave</span>
-        </div>
+<header>
+    <div>
+        <img class="logo" src="assets/logo.png" alt="Scroll Snooper Logo">
+        <h1>Scroll Snooper v1.1.0</h1>
+        <p>Pure JavaScript API that goes snooping around elements while scrolling</p>
+        <p>
+            <a href="https://github.com/phucbm/scroll-snooper/releases/latest">
+                <img src="https://badgen.net/github/release/phucbm/scroll-snooper/" alt="release">
+            </a>
+            <a href="https://github.com/phucbm/scroll-snooper/blob/main/scroll-snooper.min.js">
+                <img src="https://badgen.net/badge/minified/4KB/cyan" alt="minified">
+            </a>
+            <a href="https://github.com/phucbm/scroll-snooper/blob/main/LICENSE">
+                <img src="https://badgen.net/github/license/phucbm/scroll-snooper/" alt="license">
+            </a>
+            <a href="https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper">
+                <img src="https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge?style=rounded"
+                     alt="jsdelivr">
+            </a>
+            <a href="https://github.com/phucbm/scroll-snooper">
+                <img src="https://badgen.net/badge/icon/github?icon=github&label" alt="jsdelivr">
+            </a>
+        </p>
+        <p class="giphy">
+            <img src="assets/down-kelly-rowland-kisses-low.webp" alt="down-kelly-rowland-kisses-low">
+            <a href="https://giphy.com/gifs/down-kelly-rowland-kisses-low-LkuPxRS0F6gmc">via GIPHY</a>
+        </p>
     </div>
-</div>
-<div class="stats red" id="red-stats">
-    <div>isInViewport(<span contenteditable="true" id="red_input">0</span>): <span id="red_line_1">false</span></div>
-    <div>progress: <span id="red_line_2"></span></div>
-    <div>visibility: <span id="red_line_3"></span></div>
-    <div>events:
-        <div class="events">
-            <span class="event" id="red_onScroll">onScroll</span>
-            <span class="event" id="red_onEnter">onEnter</span>
-            <span class="event" id="red_onLeave">onLeave</span>
-        </div>
-    </div>
-</div>
+</header>
 
-<div id="blue"></div>
-<div id="red"></div>
+<section class="scene-1">
+    <div class="bg"><i></i></div>
+    <div class="sticky">
+        <h2>CSS manipulating on scroll.</h2>
+    </div>
+    <div class="inner">
+        <img class="spinning-face" src="assets/spinning-face.webp" alt="spinning-face">
+    </div>
+</section>
+
+<section class="scene-2">
+    <div class="sticky">
+        <h2>It's all about data.</h2>
+        <h4>Progress: <span data-progress></span></h4>
+        <h4>Visible pixel: <span data-pixel></span></h4>
+        <h4>Visible proportion: <span data-proportion></span></h4>
+        <p class="events">
+            <span class="event onScroll">onScroll</span>
+            <span class="event onEnter">onEnter</span>
+            <span class="event onLeave">onLeave</span>
+        </p>
+    </div>
+    <img class="shark" src="assets/shark.webp" alt="shark">
+</section>
+
+<section class="scene-3">
+    <div class="sticky">
+        <h2>Custom start/end position (inspired by Scroll Trigger)</h2>
+        <h4>start: 'top 80%' , end: 'bottom center'</h4>
+        <h4>Progress: <span data-progress></span></h4>
+    </div>
+
+    <div class="image phoebe">
+        <img src="assets/phoebe.webp" alt="phoebe">
+    </div>
+
+</section>
+
+<footer></footer>
 
 <script>
-    const blocks = ['blue', 'red'];
+    // Scene 1
+    ScrollSnooper.create({
+        trigger: document.querySelector('.scene-1'),
+        start: 'top bottom',
+        end: 'bottom bottom',
+        onScroll: data => {
+            const progress = ratio => Math.floor(ratio * Math.min(1, data.progress));
 
-    for(const block of blocks){
-        const element = document.getElementById(block);
-        // create scroll snooper
-        ScrollSnooper.create({
-            trigger: element,
-            start: 'top bottom',
-            end: 'bottom top',
-            markers: true,
-            onEnter: data => {
-                updateEvent(block, 'onEnter');
-            },
-            onLeave: data => {
-                updateEvent(block, 'onLeave');
-            },
-            onScroll: data => {
-                updateEvent(block, 'onScroll');
-                // isInViewport
-                const input = parseFloat(document.getElementById(`${block}_input`).innerText);
-                const isInViewport = ScrollSnooper.isInViewport(data.trigger, input) ? 'true' : 'false';
-                document.getElementById(`${block}_line_1`).innerText = `${isInViewport}`;
+            const block = document.querySelector('.scene-1 .spinning-face');
+            block.style.borderRadius = `${progress(50)}%`;
+            block.style.transform = `scale(${data.progress},${data.progress}) rotate(${progress(720)}deg)`;
+            block.style.backgroundColor = `rgba(${progress(220)}, ${progress(20)}, ${progress(60)}, 1)`;
 
-                // progress
-                const progress = data.progress.toFixed(2);
-                document.getElementById(`${block}_line_2`).innerText = `${progress}`;
+            document.querySelector('.scene-1 .bg i').style.transform = `translateX(${Math.max(0, Math.min(100, data.progress * 100))}%)`;
+        }
+    });
 
-                // visibility
-                const visibility = ScrollSnooper.visibility(data.trigger);
-                document.getElementById(`${block}_line_3`).innerText = `${visibility.pixel}px / ${visibility.proportion.toFixed(2)}`;
-            }
-        });
-    }
-
+    // Scene 2
     // events
-    function updateEvent(block, event){
-        document.getElementById(`${block}_${event}`).classList.add("on");
+    function updateEvent(element){
+        element.classList.add("on");
         setTimeout(() => {
-            document.getElementById(`${block}_${event}`).classList.remove("on");
+            element.classList.remove("on");
         }, 500);
     }
 
+    ScrollSnooper.create({
+        trigger: document.querySelector('.scene-2 .shark'),
+        start: 'top bottom',
+        end: 'bottom top',
+        visibility: true,
+        onEnter: data => {
+            updateEvent(document.querySelector('.scene-2 .onEnter'));
+        },
+        onLeave: data => {
+            updateEvent(document.querySelector('.scene-2 .onLeave'));
+        },
+        onScroll: data => {
+            updateEvent(document.querySelector('.scene-2 .onScroll'));
+
+            document.querySelector('.scene-2 [data-progress]').innerHTML = data.progress.toFixed(2);
+            document.querySelector('.scene-2 [data-pixel]').innerHTML = `${data.visibility.pixel}px`;
+            document.querySelector('.scene-2 [data-proportion]').innerHTML = data.visibility.proportion.toFixed(2);
+        }
+    });
+
+    // Scene 3
+    ScrollSnooper.create({
+        trigger: document.querySelector('.scene-3 .phoebe img'),
+        markers: true,
+        start: 'top 90%',
+        end: 'bottom center',
+        onEnter: data => {
+            document.querySelector('body').classList.add('scene-3-show');
+        },
+        onLeave: data => {
+            document.querySelector('body').classList.remove('scene-3-show');
+        },
+        onScroll: data => {
+            document.querySelector('.scene-3 [data-progress]').innerHTML = data.progress.toFixed(2);
+        }
+    });
+
+    // Infinite scroll
+    ScrollSnooper.create({
+        trigger: document.querySelector('body'),
+        start: 'top top',
+        end: 'bottom bottom',
+        onScroll: data => {
+            if(data.progress === 1){
+                window.scrollTo(0, 0)
+            }
+        }
+    })
 </script>
 
 </body>
