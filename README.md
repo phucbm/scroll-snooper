@@ -1,10 +1,10 @@
 # Scroll Snooper v1.1.0
 
 [![release](https://badgen.net/github/release/phucbm/scroll-snooper/)](https://github.com/phucbm/scroll-snooper/releases/latest)
-[![license](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
-[![license](https://badgen.net/github/license/phucbm/scroll-snooper/)](https://github.com/donmccurdy/three-pathfinding/blob/master/LICENSE)
+[![minified](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
+[![license](https://badgen.net/github/license/phucbm/scroll-snooper/)](https://github.com/phucbm/scroll-snooper/blob/main/LICENSE)
 [![jsdelivr](https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge?style=rounded)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
-
+[![CodePen](https://badgen.net/badge/Demo/CodePen/black)](https://codepen.io/phucbui/pen/GRvxYeg)
 
 > 🛼 Pure JavaScript API that goes snooping around elements while scrolling
 
@@ -95,7 +95,10 @@ ScrollSnooper.create({
 | Name | Type | Default | Note |
 | --- | --- | --- | --- |
 | trigger | jQuery, HTMLElement  | `undefined`  | Element(s).   |
-| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the viewport"_. For now, we have 3 positions: top, center and bottom. You can also use percentage, like `"bottom 20%"` for _"when the bottom of the trigger hits 20% from the top of the viewport"_. |
+| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom
+of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the
+viewport"_. For now, we have 3 positions: top, center and bottom. You can also use percentage, like `"bottom 20%"` for _"
+when the bottom of the trigger hits 20% from the top of the viewport"_. |
 | end | string  | `bottom top`  | Ending position.  |
 | markers | boolean  | `false`  | Add markers that are helpful during troubleshooting.  |
 | onEnter | function  | data => {}  | A callback for when the trigger is scrolled into view.  |
