@@ -283,6 +283,7 @@
                 end: 'bottom top',
                 visibility: false, // Get visibility value
                 markers: false,
+                progressOutOfView: false, // Set true to receive progress event on every update
                 onEnter: data => {
                 },
                 onLeave: data => {
@@ -326,8 +327,26 @@
             let _data = {
                 trigger: element,
                 progress: progress,
-                isInViewport: progress > 0
+                isInViewport: progress > 0 && progress < 1
             };
+
+            // Event: enter, exit
+            if(_data.isInViewport){
+                if(!isEnter){
+                    isEnter = true;
+                    option.onEnter(_data);
+                }
+            }else{
+                if(isEnter){
+                    isEnter = false;
+                    option.onLeave(_data);
+                }else{
+                    if(!option.progressOutOfView){
+                        // only run update when element is between start and end
+                        return false;
+                    }
+                }
+            }
 
             // Update markers
             if(option.markers){
@@ -350,19 +369,6 @@
 
             // Event: scroll
             option.onScroll(_data);
-
-            // Event: enter, exit
-            if(progress > 0 && progress <= 1){
-                if(!isEnter){
-                    isEnter = true;
-                    option.onEnter(_data);
-                }
-            }else{
-                if(isEnter){
-                    isEnter = false;
-                    option.onLeave(_data);
-                }
-            }
 
             // Feature: Get the most visible
             if(option.isGetTheMostVisible){
