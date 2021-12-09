@@ -1,4 +1,4 @@
-# Scroll Snooper v1.1.0 [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
+# Scroll Snooper v1.1.1 [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
 
 [![release](https://badgen.net/github/release/phucbm/scroll-snooper/)](https://github.com/phucbm/scroll-snooper/releases/latest)
 [![minified](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
@@ -14,14 +14,14 @@
 
 ```html
 
-<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.0/scroll-snooper.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.1/scroll-snooper.js"></script>
 ```
 
 or 3KB minified version
 
 ```html
 
-<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.0/scroll-snooper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.1/scroll-snooper.min.js"></script>
 ```
 
 👉 Self hosted - [Download latest release](https://github.com/phucbm/scroll-snooper/releases/latest)

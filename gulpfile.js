@@ -50,7 +50,7 @@ gulp.task('compress', function(){
 
 let oldVersion = '', newVersion = '', count = 1;
 gulp.task('replace', function(){
-    return gulp.src(['./scroll-snooper.js', './test/*', './example/*'])
+    return gulp.src(['./scroll-snooper.js', './README.md', './test/*', './example/*'])
         .pipe(replace(oldVersion, function handleReplace(match){
             console.log(`[${count}] Found "${oldVersion}"`);
             count++;
