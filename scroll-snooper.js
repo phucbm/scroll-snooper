@@ -321,14 +321,12 @@
         }
 
         // function update
-        const update = (e) => {
+        const update = () => {
             const progress = getProgress(element, option.start, option.end);
             let _data = {
                 trigger: element,
                 progress: progress,
-                isInViewport: progress > 0,
-                timeStamp: e.timeStamp,
-                type: e.type
+                isInViewport: progress > 0
             };
 
             // Update markers
@@ -384,10 +382,17 @@
             }
         };
 
-        // trigger update
-        window.addEventListener('load', e => update(e));
-        window.addEventListener('scroll', e => update(e));
-        window.addEventListener('resize', e => update(e));
+        // trigger update using rAF
+        let flag = null;
+        const getFlag = () => JSON.stringify({...scroll(), ...viewport()});
+        const fire = () => {
+            if(flag !== getFlag()){
+                update();
+                flag = getFlag();
+            }
+            window.requestAnimationFrame(fire);
+        }
+        window.requestAnimationFrame(fire);
     }
 
 })(window.ScrollSnooper = window.ScrollSnooper || {});
