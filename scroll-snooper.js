@@ -1,5 +1,5 @@
 /**!
- * Scroll Snooper v1.1.0
+ * Scroll Snooper v1.1.1
  * https://github.com/phucbm/scroll-snooper
  * MIT License - Copyright (c) 2021 Minh-Phuc Bui
  */
@@ -283,6 +283,7 @@
                 end: 'bottom top',
                 visibility: false, // Get visibility value
                 markers: false,
+                progressOutOfView: false, // Set true to receive progress event on every update
                 onEnter: data => {
                 },
                 onLeave: data => {
@@ -321,15 +322,31 @@
         }
 
         // function update
-        const update = (e) => {
+        const update = () => {
             const progress = getProgress(element, option.start, option.end);
             let _data = {
                 trigger: element,
                 progress: progress,
-                isInViewport: progress > 0,
-                timeStamp: e.timeStamp,
-                type: e.type
+                isInViewport: progress > 0 && progress < 1
             };
+
+            // Event: enter, exit
+            if(_data.isInViewport){
+                if(!isEnter){
+                    isEnter = true;
+                    option.onEnter(_data);
+                }
+            }else{
+                if(isEnter){
+                    isEnter = false;
+                    option.onLeave(_data);
+                }else{
+                    if(!option.progressOutOfView){
+                        // only run update when element is between start and end
+                        return false;
+                    }
+                }
+            }
 
             // Update markers
             if(option.markers){
@@ -353,19 +370,6 @@
             // Event: scroll
             option.onScroll(_data);
 
-            // Event: enter, exit
-            if(progress > 0 && progress <= 1){
-                if(!isEnter){
-                    isEnter = true;
-                    option.onEnter(_data);
-                }
-            }else{
-                if(isEnter){
-                    isEnter = false;
-                    option.onLeave(_data);
-                }
-            }
-
             // Feature: Get the most visible
             if(option.isGetTheMostVisible){
                 const newVisible = ScrollSnooper.getTheMostVisible(option.trigger, option.atLeastPixel);
@@ -384,10 +388,17 @@
             }
         };
 
-        // trigger update
-        window.addEventListener('load', e => update(e));
-        window.addEventListener('scroll', e => update(e));
-        window.addEventListener('resize', e => update(e));
+        // trigger update using rAF
+        let flag = null;
+        const getFlag = () => JSON.stringify({...scroll(), ...viewport()});
+        const fire = () => {
+            if(flag !== getFlag()){
+                update();
+                flag = getFlag();
+            }
+            window.requestAnimationFrame(fire);
+        }
+        window.requestAnimationFrame(fire);
     }
 
 })(window.ScrollSnooper = window.ScrollSnooper || {});
