@@ -1,10 +1,30 @@
 const gulp = require('gulp'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
-    compressFiles = ['scroll-snooper.js'];
+    browserSync = require('browser-sync').create();
+
+gulp.task('serve', function(){
+    gulp.watch('**').on('change', () => {
+        browserSync.reload();
+    });
+
+    browserSync.init({
+        server: ["./", "./example"]
+    });
+});
+
+gulp.task('serve-test', function(){
+    gulp.watch('**').on('change', () => {
+        browserSync.reload();
+    });
+
+    browserSync.init({
+        server: ["./", "./test"]
+    });
+});
 
 gulp.task('compress', function(){
-    return gulp.src(compressFiles, {base: "./"})
+    return gulp.src(['scroll-snooper.js'], {base: "./"})
         // This will output the non-minified version
         .pipe(gulp.dest('.'))
         // This will minify and rename to foo.min.js

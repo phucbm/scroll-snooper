@@ -134,6 +134,26 @@ Select multiple elements and pick out the most visible one based on its pixel di
 console.log(ScrollSnooper.getTheMostVisible($('.blocks')));
 ```
 
+## Local deployment
+
+1. Install `npm`
+
+```text
+npm install
+```
+
+2. 1 - Run example site
+
+```text
+gulp serve
+```
+
+2. 2 - Run test site
+
+```text
+gulp serve-test
+```
+
 ## License
 
 [MIT License](https://github.com/phucbm/scroll-snooper/blob/main/LICENSE)
