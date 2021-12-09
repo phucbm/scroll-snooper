@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scroll Snooper v1.1.0</title>
-    <script src="scroll-snooper.js"></script>
-    <link rel="icon" type="image/png" href="assets/logo.png"/>
-    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="icon" type="image/png" href="img/logo.png"/>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header>
     <div>
-        <img class="logo" src="assets/logo.png" alt="Scroll Snooper Logo">
+        <img class="logo" src="img/logo.png" alt="Scroll Snooper Logo">
         <h1>Scroll Snooper v1.1.0</h1>
         <p>Pure JavaScript API that goes snooping around elements while scrolling</p>
         <p>
@@ -34,7 +33,7 @@
             </a>
         </p>
         <p class="giphy">
-            <img src="assets/down-kelly-rowland-kisses-low.webp" alt="down-kelly-rowland-kisses-low">
+            <img src="img/down-kelly-rowland-kisses-low.webp" alt="down-kelly-rowland-kisses-low">
             <a href="https://giphy.com/gifs/down-kelly-rowland-kisses-low-LkuPxRS0F6gmc">via GIPHY</a>
         </p>
     </div>
@@ -46,7 +45,7 @@
         <h2>CSS manipulating on scroll.</h2>
     </div>
     <div class="inner">
-        <img class="spinning-face" src="assets/spinning-face.webp" alt="spinning-face">
+        <img class="spinning-face" src="img/spinning-face.webp" alt="spinning-face">
     </div>
 </section>
 
@@ -62,7 +61,7 @@
             <span class="event onLeave">onLeave</span>
         </p>
     </div>
-    <img class="shark" src="assets/shark.webp" alt="shark">
+    <img class="shark" src="img/shark.webp" alt="shark">
 </section>
 
 <section class="scene-3">
@@ -73,89 +72,14 @@
     </div>
 
     <div class="image phoebe">
-        <img src="assets/phoebe.webp" alt="phoebe">
+        <img src="img/phoebe.webp" alt="phoebe">
     </div>
 
 </section>
 
-<footer></footer>
 
-<script>
-    // Scene 1
-    ScrollSnooper.create({
-        trigger: document.querySelector('.scene-1'),
-        start: 'top bottom',
-        end: 'bottom bottom',
-        onScroll: data => {
-            const progress = ratio => Math.floor(ratio * Math.min(1, data.progress));
-
-            const block = document.querySelector('.scene-1 .spinning-face');
-            block.style.borderRadius = `${progress(50)}%`;
-            block.style.transform = `scale(${data.progress},${data.progress}) rotate(${progress(720)}deg)`;
-            block.style.backgroundColor = `rgba(${progress(220)}, ${progress(20)}, ${progress(60)}, 1)`;
-
-            document.querySelector('.scene-1 .bg i').style.transform = `translateX(${Math.max(0, Math.min(100, data.progress * 100))}%)`;
-        }
-    });
-
-    // Scene 2
-    // events
-    function updateEvent(element){
-        element.classList.add("on");
-        setTimeout(() => {
-            element.classList.remove("on");
-        }, 500);
-    }
-
-    ScrollSnooper.create({
-        trigger: document.querySelector('.scene-2 .shark'),
-        start: 'top bottom',
-        end: 'bottom top',
-        visibility: true,
-        onEnter: data => {
-            updateEvent(document.querySelector('.scene-2 .onEnter'));
-        },
-        onLeave: data => {
-            updateEvent(document.querySelector('.scene-2 .onLeave'));
-        },
-        onScroll: data => {
-            updateEvent(document.querySelector('.scene-2 .onScroll'));
-
-            document.querySelector('.scene-2 [data-progress]').innerHTML = data.progress.toFixed(2);
-            document.querySelector('.scene-2 [data-pixel]').innerHTML = `${data.visibility.pixel}px`;
-            document.querySelector('.scene-2 [data-proportion]').innerHTML = data.visibility.proportion.toFixed(2);
-        }
-    });
-
-    // Scene 3
-    ScrollSnooper.create({
-        trigger: document.querySelector('.scene-3 .phoebe img'),
-        markers: true,
-        start: 'top 90%',
-        end: 'bottom center',
-        onEnter: data => {
-            document.querySelector('body').classList.add('scene-3-show');
-        },
-        onLeave: data => {
-            document.querySelector('body').classList.remove('scene-3-show');
-        },
-        onScroll: data => {
-            document.querySelector('.scene-3 [data-progress]').innerHTML = data.progress.toFixed(2);
-        }
-    });
-
-    // Infinite scroll
-    ScrollSnooper.create({
-        trigger: document.querySelector('body'),
-        start: 'top top',
-        end: 'bottom bottom',
-        onScroll: data => {
-            if(data.progress === 1){
-                window.scrollTo(0, 0)
-            }
-        }
-    })
-</script>
+<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.0/scroll-snooper.min.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
