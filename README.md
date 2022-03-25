@@ -1,4 +1,4 @@
-# Scroll Snooper v1.1.1 [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
+# Scroll Snooper v1.2.0 [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
 
 [![release](https://badgen.net/github/release/phucbm/scroll-snooper/?cache=600)](https://github.com/phucbm/scroll-snooper/releases/latest)
 [![minified](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
@@ -14,14 +14,14 @@
 
 ```html
 
-<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.1/scroll-snooper.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.2.0/scroll-snooper.js"></script>
 ```
 
 or 4KB minified version
 
 ```html
 
-<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.1.1/scroll-snooper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.2.0/scroll-snooper.min.js"></script>
 ```
 
 👉 Self hosted - [Download latest release](https://github.com/phucbm/scroll-snooper/releases/latest)
@@ -92,14 +92,16 @@ ScrollSnooper.create({
 
 ### ScrollSnooper.create({}) : void
 
-| Name | Type | Default | Note |
-| --- | --- | --- | --- |
-| trigger | jQuery, HTMLElement  | `undefined`  | Element(s).   |
-| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the viewport"_. For now, we have 3 positions: top, center and bottom.  |
-| end | string  | `bottom top`  | Ending position.  |
-| onEnter | function  | data => {}  | A callback for when the trigger is scrolled into view.  |
-| onLeave | function  | data => {}  | A callback for when the trigger is scrolled out of view.  |
-| onScroll | function  | data => {}  | A callback that gets called everytime the scroll position changed (scrolling, resizing).  |
+| Name | Type | Default | Note                                                                                                                                                                                                                                                  |
+| --- | --- | --- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| trigger | jQuery, HTMLElement  | `undefined`  | Element(s).                                                                                                                                                                                                                                           |
+| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom
+of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the
+viewport"_. `"top 90%"` or `"bottom 100px"` are also accepted. |
+| end | string  | `bottom top`  | Ending position.                                                                                                                                                                                                                                      |
+| onEnter | function  | data => {}  | A callback for when the trigger is scrolled into view.                                                                                                                                                                                                |
+| onLeave | function  | data => {}  | A callback for when the trigger is scrolled out of view.                                                                                                                                                                                              |
+| onScroll | function  | data => {}  | A callback that gets called everytime the scroll position changed (scrolling, resizing).                                                                                                                                                              |
 
 When `isGetTheMostVisible` is `true`
 
@@ -151,11 +153,11 @@ gulp serve
 2. 2 - Run test site
 
 ```text
-gulp serve-test
+gulp dev
 ```
 
 ## License
 
 [MIT License](https://github.com/phucbm/scroll-snooper/blob/main/LICENSE)
 
-Copyright (c) 2021 Minh-Phuc Bui
+Copyright (c) 2022 Minh-Phuc Bui

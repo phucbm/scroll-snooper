@@ -1,7 +1,7 @@
 /**!
- * Scroll Snooper v1.1.1
+ * Scroll Snooper v1.2.0
  * https://github.com/phucbm/scroll-snooper
- * MIT License - Copyright (c) 2021 Minh-Phuc Bui
+ * MIT License - Copyright (c) 2022 Minh-Phuc Bui
  */
 ;(function(ScrollSnooper){
     /**
