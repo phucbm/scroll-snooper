@@ -19,9 +19,9 @@ gulp.task('serve', function(){
 });
 
 /**
- * Serve: Test
+ * Dev
  */
-gulp.task('serve-test', function(){
+gulp.task('dev', function(){
     gulp.watch('**').on('change', () => {
         browserSync.reload();
     });
