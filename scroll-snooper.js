@@ -108,9 +108,10 @@
     /**
      * Get position from string
      * @param string : string
+     * @param referenceHeight
      * @returns {number|*}
      */
-    function getPositionFromString(string){
+    function getPositionFromString(string, referenceHeight = viewport().h){
         const positionStrings = {
             top: 0,
             center: 0.5,
@@ -123,6 +124,9 @@
         // percentage
         if(string.includes('%')) return parseInt(string) / 100;
 
+        // pixel
+        if(string.includes('px')) return parseInt(string) / referenceHeight;
+
         return position;
     }
 
@@ -130,11 +134,12 @@
     /**
      * Convert string to coordinate value
      * @param string : string | "top bottom"
+     * @param elHeight
      * @returns {{viewport, element}}
      */
-    function getCoordinateFromString(string){
+    function getCoordinateFromString(string, elHeight){
         const split = string.split(' ');
-        const element = getPositionFromString(split[0]);
+        const element = getPositionFromString(split[0], elHeight);
         const viewport = getPositionFromString(split[1]);
 
         return {element, viewport};
@@ -148,7 +153,7 @@
      * @returns {number}
      */
     function getDistance(element, coordinateString){
-        const coordinate = getCoordinateFromString(coordinateString);
+        const coordinate = getCoordinateFromString(coordinateString, element.offsetHeight);
         const elementAnchor = getOffset(element).top + element.offsetHeight * coordinate.element;
         const viewportAnchor = scroll().top + viewport().h * coordinate.viewport;
         return elementAnchor - viewportAnchor;
