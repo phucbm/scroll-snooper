@@ -1,17 +1,18 @@
-const blocks = ["red"];
+const blocks = ["blue"];
 
 for(const block of blocks){
     const element = document.getElementById(block);
     // create scroll snooper
     ScrollSnooper.create({
         trigger: element,
-        start: "top 90%",
-        end: "bottom 100px",
+        start: "top 70%",
+        end: "bottom 200px",
         markers: true,
         onEnter: (data) => {
             updateEvent(block, "onEnter");
         },
         onLeave: (data) => {
+            console.log(data)
             updateEvent(block, "onLeave");
         },
         onScroll: (data) => {

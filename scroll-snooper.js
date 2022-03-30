@@ -304,7 +304,7 @@
                 },
             }, ...config
         };
-        let isEnter = false, lastMostVisible = undefined;
+        let isEnter = false, lastMostVisible = undefined, previousPosition = scroll().top;
         const element = getElement(option.trigger);
 
         // create markers
@@ -332,8 +332,10 @@
             let _data = {
                 trigger: element,
                 progress: progress,
+                direction: scroll().top > previousPosition ? -1 : 1,
                 isInViewport: progress > 0 && progress < 1
             };
+            previousPosition = scroll().top;
 
             // Event: enter, exit
             if(_data.isInViewport){
