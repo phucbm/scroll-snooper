@@ -247,9 +247,9 @@
 
     /**
      * Get the most visible element
-     * @param elements : HTMLElement
-     * @param atLeastPixel : number
-     * @returns {*&{el: (*|jQuery|HTMLElement)}}
+     * @param elements
+     * @param atLeastPixel
+     * @returns {{isFound: boolean, el: undefined, index: undefined, pixel: number}}
      */
     ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
         let mostVisibleElement = undefined, maxVisibility = {pixel: 0},
@@ -264,9 +264,6 @@
                 isFound = true;
             }
             index++;
-        }
-        if(typeof jQuery !== 'undefined' && isFound){
-            mostVisibleElement = isjQueryElement(mostVisibleElement) ? mostVisibleElement : jQuery(mostVisibleElement)
         }
         return {
             isFound, index: maxIndex,
