@@ -247,9 +247,9 @@
 
     /**
      * Get the most visible element
-     * @param elements : HTMLElement
-     * @param atLeastPixel : number
-     * @returns {*&{el: (*|jQuery|HTMLElement)}}
+     * @param elements
+     * @param atLeastPixel
+     * @returns {{isFound: boolean, el: undefined, index: undefined, pixel: number}}
      */
     ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
         let mostVisibleElement = undefined, maxVisibility = {pixel: 0},
@@ -264,9 +264,6 @@
                 isFound = true;
             }
             index++;
-        }
-        if(typeof jQuery !== 'undefined' && isFound){
-            mostVisibleElement = isjQueryElement(mostVisibleElement) ? mostVisibleElement : jQuery(mostVisibleElement)
         }
         return {
             isFound, index: maxIndex,
@@ -328,70 +325,69 @@
 
         // function update
         const update = () => {
-            const progress = getProgress(element, option.start, option.end);
-            let _data = {
-                trigger: element,
-                progress: progress,
-                direction: scroll().top > previousPosition ? -1 : 1,
-                isInViewport: progress > 0 && progress < 1
-            };
-            previousPosition = scroll().top;
-
-            // Event: enter, exit
-            if(_data.isInViewport){
-                if(!isEnter){
-                    isEnter = true;
-                    option.onEnter(_data);
-                }
-            }else{
-                if(isEnter){
-                    isEnter = false;
-                    option.onLeave(_data);
-                }else{
-                    if(!option.progressOutOfView){
-                        // only run update when element is between start and end
-                        return false;
-                    }
-                }
-            }
-
-            // Update markers
-            if(option.markers){
-                const offsetTop = getOffset(element).top;
-                const startOffset = element.offsetHeight * markers.start.element;
-                const endOffset = element.offsetHeight * markers.end.element;
-
-                // element milestone
-                markers.elementStart.style.top = `${offsetTop + startOffset}px`;
-                markers.elementEnd.style.top = `${offsetTop + endOffset}px`;
-
-                // element range
-                markers.elementStart.style.height = `${endOffset - startOffset}px`;
-            }
-
-            // Get visibility value
-            if(option.visibility){
-                _data = {..._data, visibility: ScrollSnooper.visibility(element)};
-            }
-
-            // Event: scroll
-            option.onScroll(_data);
-
             // Feature: Get the most visible
             if(option.isGetTheMostVisible){
                 const newVisible = ScrollSnooper.getTheMostVisible(option.trigger, option.atLeastPixel);
-
                 if(typeof lastMostVisible === 'undefined' || newVisible.index !== lastMostVisible.index){
                     lastMostVisible = newVisible;
 
                     // Event: change visible element
-                    option.onChange({..._data, mostVisible: newVisible});
+                    option.onChange({mostVisible: newVisible});
 
                     // Event: found new visible element
                     if(newVisible.isFound){
-                        option.onFound({..._data, mostVisible: newVisible});
+                        option.onFound({...newVisible});
                     }
                 }
+            }else{
+                const progress = getProgress(element, option.start, option.end);
+                let _data = {
+                    trigger: element,
+                    progress: progress,
+                    direction: scroll().top > previousPosition ? -1 : 1,
+                    isInViewport: progress > 0 && progress < 1
+                };
+                previousPosition = scroll().top;
+
+                // Event: enter, exit
+                if(_data.isInViewport){
+                    if(!isEnter){
+                        isEnter = true;
+                        option.onEnter(_data);
+                    }
+                }else{
+                    if(isEnter){
+                        isEnter = false;
+                        option.onLeave(_data);
+                    }else{
+                        if(!option.progressOutOfView){
+                            // only run update when element is between start and end
+                            return false;
+                        }
+                    }
+                }
+
+                // Update markers
+                if(option.markers){
+                    const offsetTop = getOffset(element).top;
+                    const startOffset = element.offsetHeight * markers.start.element;
+                    const endOffset = element.offsetHeight * markers.end.element;
+
+                    // element milestone
+                    markers.elementStart.style.top = `${offsetTop + startOffset}px`;
+                    markers.elementEnd.style.top = `${offsetTop + endOffset}px`;
+
+                    // element range
+                    markers.elementStart.style.height = `${endOffset - startOffset}px`;
+                }
+
+                // Get visibility value
+                if(option.visibility){
+                    _data = {..._data, visibility: ScrollSnooper.visibility(element)};
+                }
+
+                // Event: scroll
+                option.onScroll(_data);
             }
         };
 
