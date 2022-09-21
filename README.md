@@ -70,14 +70,14 @@ console.log(ScrollSnooper.visibility($('#block')));
 Select multiple elements and pick out the most visible one based on its pixel displaying on the viewport.
 
 ```js
-console.log(ScrollSnooper.getTheMostVisible($('.blocks')));
+console.log(ScrollSnooper.getTheMostVisible(document.querySelectAll('.blocks')));
 ```
 
 or use with create()
 
 ```js
 ScrollSnooper.create({
-    trigger: $('.blocks'),
+    trigger: document.querySelectAll('.blocks'),
     isGetTheMostVisible: true,
     onChange: data => {
         console.log(data);
@@ -133,7 +133,7 @@ console.log(ScrollSnooper.visibility($('#block')));
 Select multiple elements and pick out the most visible one based on its pixel displaying on the viewport.
 
 ```js
-console.log(ScrollSnooper.getTheMostVisible($('.blocks')));
+console.log(ScrollSnooper.getTheMostVisible(document.querySelectAll('.blocks')));
 ```
 
 ## Local deployment
