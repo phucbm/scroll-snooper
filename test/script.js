@@ -1,4 +1,4 @@
-const blocks = ["blue"];
+const blocks = ["blue", "red"];
 
 for(const block of blocks){
     const element = document.getElementById(block);
