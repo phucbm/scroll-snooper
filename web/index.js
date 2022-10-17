@@ -8,9 +8,6 @@ import homeHtml from "./html/home.html";
 const app = document.querySelector('#root')
 app.innerHTML = homeHtml;
 
-// init
-//ScrollSnooper.init();
-
 // Scene 1
 ScrollSnooper.create({
     trigger: document.querySelector('.scene-1'),
