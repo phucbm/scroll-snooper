@@ -1,5 +1,6 @@
 // Scene 1
-ScrollSnooper.create({
+Scroll
+Snooper.create({
     trigger: document.querySelector('.scene-1'),
     start: 'top bottom',
     end: 'bottom bottom',
@@ -24,7 +25,8 @@ function updateEvent(element){
     }, 500);
 }
 
-ScrollSnooper.create({
+Scroll
+Snooper.create({
     trigger: document.querySelector('.scene-2 .shark'),
     start: 'top bottom',
     end: 'bottom top',
@@ -45,7 +47,8 @@ ScrollSnooper.create({
 });
 
 // Scene 3
-ScrollSnooper.create({
+Scroll
+Snooper.create({
     trigger: document.querySelector('.scene-3 .phoebe img'),
     markers: true,
     start: 'top 90%',
@@ -62,7 +65,8 @@ ScrollSnooper.create({
 });
 
 // Infinite scroll
-ScrollSnooper.create({
+Scroll
+Snooper.create({
     trigger: document.querySelector('body'),
     start: 'top top',
     end: 'bottom bottom',

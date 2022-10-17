@@ -3,7 +3,10 @@
  * https://github.com/phucbm/scroll-snooper
  * MIT License - Copyright (c) 2022 Minh-Phuc Bui
  */
-;(function(ScrollSnooper){
+;(function(Scroll
+Snooper
+)
+{
     /**
      * Viewport size
      * @returns {{w: number, h: number}}
@@ -218,10 +221,12 @@
      * @param proportion :number | returns true if at least [n]% of the element is in the viewport
      * @returns {boolean}
      */
-    ScrollSnooper.isInViewport = (element, proportion = 0) => {
+    Scroll
+    Snooper.isInViewport = (element, proportion = 0) => {
         const progress = getProgress(getElement(element), 'top bottom', 'bottom top');
         const isInViewport = progress > 0 && progress <= 1;
-        const isValidProportion = ScrollSnooper.visibility(element).proportion >= proportion;
+        const isValidProportion = Scroll
+        Snooper.visibility(element).proportion >= proportion;
 
         return isValidProportion && isInViewport;
     }
@@ -232,7 +237,8 @@
      * @param element : HTMLElement
      * @returns {{proportion: number, pixel: number}}
      */
-    ScrollSnooper.visibility = element => {
+    Scroll
+    Snooper.visibility = element => {
         element = getElement(element);
         const offset = getRelativeOffset(element);
 
@@ -251,12 +257,14 @@
      * @param atLeastPixel
      * @returns {{isFound: boolean, el: undefined, index: undefined, pixel: number}}
      */
-    ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
+    Scroll
+    Snooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
         let mostVisibleElement = undefined, maxVisibility = {pixel: 0},
             isFound = false,
             index = 0, maxIndex = undefined;
         for(const element of elements){
-            const visibility = ScrollSnooper.visibility(element);
+            const visibility = Scroll
+            Snooper.visibility(element);
             if(visibility.pixel >= atLeastPixel && visibility.pixel > maxVisibility.pixel){
                 maxVisibility = visibility;
                 mostVisibleElement = element;
@@ -277,7 +285,8 @@
      * Create
      * @param config : object
      */
-    ScrollSnooper.create = (config) => {
+    Scroll
+    Snooper.create = (config) => {
         const option = {
             ...{
                 trigger: undefined,
@@ -327,7 +336,8 @@
         const update = () => {
             // Feature: Get the most visible
             if(option.isGetTheMostVisible){
-                const newVisible = ScrollSnooper.getTheMostVisible(option.trigger, option.atLeastPixel);
+                const newVisible = Scroll
+                Snooper.getTheMostVisible(option.trigger, option.atLeastPixel);
                 if(typeof lastMostVisible === 'undefined' || newVisible.index !== lastMostVisible.index){
                     lastMostVisible = newVisible;
 
@@ -383,7 +393,7 @@
 
                 // Get visibility value
                 if(option.visibility){
-                    _data = {..._data, visibility: ScrollSnooper.visibility(element)};
+                    _data = {..._data, visibility: Scroll Snooper.visibility(element)};
                 }
 
                 // Event: scroll
@@ -404,4 +414,10 @@
         window.requestAnimationFrame(fire);
     }
 
-})(window.ScrollSnooper = window.ScrollSnooper || {});
+}
+)
+(window.Scroll
+Snooper = window.Scroll
+Snooper || {}
+)
+;

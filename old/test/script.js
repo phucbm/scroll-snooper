@@ -3,7 +3,8 @@ const blocks = ["blue", "red"];
 for(const block of blocks){
     const element = document.getElementById(block);
     // create scroll snooper
-    ScrollSnooper.create({
+    Scroll
+    Snooper.create({
         trigger: element,
         start: "top 70%",
         end: "bottom 200px",
@@ -21,7 +22,8 @@ for(const block of blocks){
             const input = parseFloat(
                 document.getElementById(`${block}_input`).innerText
             );
-            const isInViewport = ScrollSnooper.isInViewport(data.trigger, input)
+            const isInViewport = Scroll
+            Snooper.isInViewport(data.trigger, input)
                 ? "true"
                 : "false";
             document.getElementById(`${block}_line_1`).innerText = `${isInViewport}`;
@@ -31,7 +33,8 @@ for(const block of blocks){
             document.getElementById(`${block}_line_2`).innerText = `${progress}`;
 
             // visibility
-            const visibility = ScrollSnooper.visibility(data.trigger);
+            const visibility = Scroll
+            Snooper.visibility(data.trigger);
             document.getElementById(`${block}_line_3`).innerText = `${
                 visibility.pixel
             }px / ${visibility.proportion.toFixed(2)}`;
