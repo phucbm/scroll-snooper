@@ -7,6 +7,7 @@ const common = require('./webpack.common')
 
 module.exports = merge(common, {
     mode: 'production',
+    entry: [paths.web + '/web.js'],
     devtool: false,
     output: {
         path: paths.build,

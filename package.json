@@ -26,7 +26,7 @@
     "build-umd": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
     "build-module": "cross-env NODE_ENV=production webpack --config config/webpack.module.js",
     "prod": "cross-env NODE_ENV=production npm run build-umd & npm run build-module",
-    "build-web": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
     "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
   },
   "devDependencies": {

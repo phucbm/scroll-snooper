@@ -9,7 +9,7 @@ module.exports = {
     entry: paths.entry,
     output: {
         filename: `${packageInfo.name}.min.js`,
-        library: `${packageInfo.codeName}`,
+        //library: `${packageInfo.codeName}`,
         libraryTarget: 'umd',
         umdNamedDefine: true,
         // prevent error: `Uncaught ReferenceError: self is not define`
