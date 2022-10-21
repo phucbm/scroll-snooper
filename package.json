@@ -3,7 +3,7 @@
   "prettyName": "Scroll Snooper",
   "codeName": "ScrollSnooper",
   "version": "2.0.0",
-  "description": "4KB vanilla JS to use as a lite version of GSAP Scroll Trigger",
+  "description": "Pure JavaScript API that goes snooping around elements while scrolling",
   "homepage": "https://github.com/phucbm/scroll-snooper",
   "repository": {
     "type": "git",

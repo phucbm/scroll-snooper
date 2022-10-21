@@ -2,11 +2,19 @@ import './styles/web.scss'
 import '@/_index'
 import html from "./html/web.html";
 
+const packageInfo = require('../package.json');
+
 /**
  * Create HTML
  */
 const app = document.querySelector('#root')
 app.innerHTML = html;
+
+// update title
+const title = `${packageInfo.prettyName} v${packageInfo.version}`;
+document.title = `${title} - ${packageInfo.description}`;
+document.querySelector('[data-title]').innerHTML = title;
+document.querySelector('[data-description]').innerHTML = packageInfo.description;
 
 // Scene 1
 ScrollSnooper.create({
