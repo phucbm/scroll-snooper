@@ -3,7 +3,7 @@
   "prettyName": "Scroll Snooper",
   "codeName": "ScrollSnooper",
   "version": "2.0.0",
-  "description": "\uD83C\uDFC4\u200D♂️ 4KB vanilla JS to use as a lite version of GSAP Scroll Trigger",
+  "description": "4KB vanilla JS to use as a lite version of GSAP Scroll Trigger",
   "homepage": "https://github.com/phucbm/scroll-snooper",
   "repository": {
     "type": "git",
@@ -22,10 +22,11 @@
   "main": "./dist/scroll-snooper.module.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",
+    "dev-web": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev-web.js",
     "build-umd": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js",
     "build-module": "cross-env NODE_ENV=production webpack --config config/webpack.module.js",
     "prod": "cross-env NODE_ENV=production npm run build-umd & npm run build-module",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
+    "build-web": "cross-env NODE_ENV=production webpack --config config/webpack.web.js",
     "publish": "cross-env NODE_ENV=production webpack --config config/webpack.umd.js & npm publish"
   },
   "devDependencies": {

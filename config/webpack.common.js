@@ -6,7 +6,7 @@ const {paths, packageInfo} = require('./config')
 
 module.exports = {
     // Where webpack looks to start building the bundle
-    entry: [paths.web + '/index.js'],
+    entry: [paths.web + '/dev.js'],
 
     // Where webpack outputs the assets and bundles
     output: {
@@ -39,7 +39,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             inject: true,
             hash: true,
-            title: packageInfo.prettyName,
+            title: `${packageInfo.prettyName} v${packageInfo.version}`,
             favicon: paths.web + '/images/favicon.png',
             template: paths.web + '/template.html', // template file
             filename: 'index.html', // output file

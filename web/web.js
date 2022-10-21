@@ -1,12 +1,12 @@
-import './styles/index.scss'
+import './styles/web.scss'
 import '@/_index'
-import homeHtml from "./html/home.html";
+import html from "./html/web.html";
 
 /**
  * Create HTML
  */
 const app = document.querySelector('#root')
-app.innerHTML = homeHtml;
+app.innerHTML = html;
 
 // Scene 1
 ScrollSnooper.create({
