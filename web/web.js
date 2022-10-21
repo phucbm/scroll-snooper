@@ -1,3 +1,13 @@
+import './styles/web.scss'
+import '@/_index'
+import html from "./html/web.html";
+
+/**
+ * Create HTML
+ */
+const app = document.querySelector('#root')
+app.innerHTML = html;
+
 // Scene 1
 ScrollSnooper.create({
     trigger: document.querySelector('.scene-1'),

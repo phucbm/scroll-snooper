@@ -1,4 +1,4 @@
-# Scroll Snooper v1.2.2 [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
+# Scroll Snooper [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
 
 [![release](https://badgen.net/github/release/phucbm/scroll-snooper/?cache=600)](https://github.com/phucbm/scroll-snooper/releases/latest)
 [![minified](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
@@ -10,21 +10,31 @@
 
 ## Getting started
 
+### NPM package
+
+```shell
+npm i scroll-snooper
+```
+
+or as a dev dependency
+
+```shell
+npm i scroll-snooper --save-dev
+```
+
+Import
+
+```js
+import "scroll-snooper";
+
+// your script
+```
+
+### CDN
+
 👉 CDN Hosted - [jsDelivr](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
 
-```html
-
-<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.2.2/scroll-snooper.js"></script>
-```
-
-or 4KB minified version
-
-```html
-
-<script src="https://cdn.jsdelivr.net/gh/phucbm/scroll-snooper@1.2.2/scroll-snooper.min.js"></script>
-```
-
-👉 Self hosted - [Download latest release](https://github.com/phucbm/scroll-snooper/releases/latest)
+👉 Self hosted - [Download the latest release](https://github.com/phucbm/scroll-snooper/releases/latest)
 
 ## Quick use
 
@@ -92,24 +102,26 @@ ScrollSnooper.create({
 
 ### ScrollSnooper.create({}) : void
 
-| Name | Type | Default | Note                                                                                                                                                                                                                                                  |
-| --- | --- | --- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| trigger | jQuery, HTMLElement  | `undefined`  | Element(s).                                                                                                                                                                                                                                           |
-| start | string  | `top bottom`  | Starting position, `top bottom` means _"when the top of the trigger hits the bottom
+| Name    | Type                | Default      | Note                                                                                |
+|---------|---------------------|--------------|-------------------------------------------------------------------------------------|
+| trigger | jQuery, HTMLElement | `undefined`  | Element(s).                                                                         |
+| start   | string              | `top bottom` | Starting position, `top bottom` means _"when the top of the trigger hits the bottom |
+
 of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the
 viewport"_. `"top 90%"` or `"bottom 100px"` are also accepted. |
-| end | string  | `bottom top`  | Ending position.                                                                                                                                                                                                                                      |
-| onEnter | function  | data => {}  | A callback for when the trigger is scrolled into view.                                                                                                                                                                                                |
-| onLeave | function  | data => {}  | A callback for when the trigger is scrolled out of view.                                                                                                                                                                                              |
-| onScroll | function  | data => {}  | A callback that gets called everytime the scroll position changed (scrolling, resizing).                                                                                                                                                              |
+| end | string | `bottom top`  | Ending position. |
+| onEnter | function | data => {} | A callback for when the trigger is scrolled into view. |
+| onLeave | function | data => {} | A callback for when the trigger is scrolled out of view. |
+| onScroll | function | data => {} | A callback that gets called everytime the scroll position changed (scrolling,
+resizing). |
 
 When `isGetTheMostVisible` is `true`
 
-| Name | Type | Default | Note |
-| --- | --- | --- | --- |
-| isGetTheMostVisible | boolean  | false  | Activate the watcher for multiple triggers. |
-| onChange | function  | data => {}  | A callback that gets called everytime the most visible element changed (including `undefined`).  |
-| onFound | function  | data => {}  | A callback that gets called everytime one of the triggers is scrolled into view.  |
+| Name                | Type     | Default    | Note                                                                                            |
+|---------------------|----------|------------|-------------------------------------------------------------------------------------------------|
+| isGetTheMostVisible | boolean  | false      | Activate the watcher for multiple triggers.                                                     |
+| onChange            | function | data => {} | A callback that gets called everytime the most visible element changed (including `undefined`). |
+| onFound             | function | data => {} | A callback that gets called everytime one of the triggers is scrolled into view.                |
 
 ### ScrollSnooper.isInViewport( element: jQuery | HTML element, proportion: number) : Boolean
 
@@ -136,24 +148,30 @@ Select multiple elements and pick out the most visible one based on its pixel di
 console.log(ScrollSnooper.getTheMostVisible(document.querySelectAll('.blocks')));
 ```
 
-## Local deployment
+## Deployment
 
-1. Install `npm`
+Start dev server
 
-```text
-npm install
+```shell
+npm run dev
 ```
 
-2. 1 - Run example site
+Build production files (UMD and NPM package)
 
-```text
-gulp serve
+```shell
+npm run prod
 ```
 
-2. 2 - Run test site
+Build sources from `./web` to `./build`
 
-```text
-gulp dev
+```shell
+npm run build
+```
+
+Build files from `./src` to `./dist` then publish to `npm`
+
+```shell
+npm run publish
 ```
 
 ## License

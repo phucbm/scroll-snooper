@@ -1,3 +1,17 @@
+import './styles/dev.scss'
+import '@/_index'
+import html from "./html/dev.html";
+
+/**
+ * Create HTML
+ */
+const app = document.querySelector('#root')
+app.innerHTML = html;
+
+
+/**
+ * Dev
+ */
 const blocks = ["blue", "red"];
 
 for(const block of blocks){
