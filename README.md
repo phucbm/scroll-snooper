@@ -87,13 +87,13 @@ or use with create()
 
 ```js
 ScrollSnooper.create({
-    trigger: document.querySelectAll('.blocks'),
+    trigger: document.querySelectorAll('.blocks'),
     isGetTheMostVisible: true,
     onChange: data => {
-        console.log(data);
+        console.log('onChange', data);
     },
     onFound: data => {
-        console.log(data);
+        console.log('onFound', data);
     },
 });
 ```
