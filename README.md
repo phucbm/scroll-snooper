@@ -42,7 +42,7 @@ import "scroll-snooper";
 
 ```js
 ScrollSnooper.create({
-    trigger: document.querySelect('.block'),
+    trigger: document.querySelector('.block'),
     onEnter: data => {
         console.log(data);
     },
@@ -58,13 +58,13 @@ ScrollSnooper.create({
 ### Is in viewport
 
 ```js
-console.log(ScrollSnooper.isInViewport(document.querySelect('.block')));
+console.log(ScrollSnooper.isInViewport(document.querySelector('.block')));
 ```
 
 or only return true if at least 20% of element is appearing in viewport
 
 ```js
-console.log(ScrollSnooper.isInViewport(document.querySelect('.block'), 0.2));
+console.log(ScrollSnooper.isInViewport(document.querySelector('.block'), 0.2));
 ```
 
 ### Visibility
@@ -72,7 +72,7 @@ console.log(ScrollSnooper.isInViewport(document.querySelect('.block'), 0.2));
 Get the number of pixels and proportion (%) of the element displaying on the viewport.
 
 ```js
-console.log(ScrollSnooper.visibility(document.querySelect('.block')));
+console.log(ScrollSnooper.visibility(document.querySelector('.block')));
 ```
 
 ### The most visible element
@@ -80,7 +80,7 @@ console.log(ScrollSnooper.visibility(document.querySelect('.block')));
 Select multiple elements and pick out the most visible one based on its pixel displaying on the viewport.
 
 ```js
-console.log(ScrollSnooper.getTheMostVisible(document.querySelectAll('.blocks')));
+console.log(ScrollSnooper.getTheMostVisible(document.querySelectorAll('.blocks')));
 ```
 
 or use with create()
@@ -129,7 +129,7 @@ Returns `true` if the element is in the viewport. You can optionally specify a m
 ScrollSnooper.isInViewport(element, 0.2) would only return true if at least 20% of the element is in the viewport.
 
 ```js
-console.log(ScrollSnooper.isInViewport(document.querySelect('.block'), 0.2));
+console.log(ScrollSnooper.isInViewport(document.querySelector('.block'), 0.2));
 ```
 
 ### ScrollSnooper.visibility( element: jQuery | HTML element ) : {pixel, proportion}
@@ -137,7 +137,7 @@ console.log(ScrollSnooper.isInViewport(document.querySelect('.block'), 0.2));
 Get the number of pixels and proportion (%) of the element displaying on the viewport.
 
 ```js
-console.log(ScrollSnooper.visibility(document.querySelect('.block')));
+console.log(ScrollSnooper.visibility(document.querySelector('.block')));
 ```
 
 ### ScrollSnooper.getTheMostVisible( element: jQuery | HTML element, atLeastPixel: number ) : Object
@@ -145,7 +145,7 @@ console.log(ScrollSnooper.visibility(document.querySelect('.block')));
 Select multiple elements and pick out the most visible one based on its pixel displaying on the viewport.
 
 ```js
-console.log(ScrollSnooper.getTheMostVisible(document.querySelectAll('.blocks')));
+console.log(ScrollSnooper.getTheMostVisible(document.querySelectorAll('.blocks')));
 ```
 
 ## Deployment
