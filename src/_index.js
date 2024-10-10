@@ -11,16 +11,41 @@ import {
 
 
 ;(function(ScrollSnooper){
+    // Helper function to get scroll position based on orientation
+    const getScrollPosition = (orientation) => {
+        const scrollPos = scroll();
+        return orientation === 'horizontal' ? scrollPos.left : scrollPos.top;
+    };
+
+    // Helper function to get viewport size based on orientation
+    const getViewportSize = (orientation) => {
+        const viewportSize = viewport();
+        return orientation === 'horizontal' ? viewportSize.w : viewportSize.h;
+    };
+
+    // Helper function to convert user-friendly terms to start/end
+    const convertToStartEnd = (position, orientation) => {
+        if(orientation === 'vertical'){
+            return position === 'top' ? 'start' : 'end';
+        }else{
+            return position === 'left' ? 'start' : 'end';
+        }
+    };
+
     /**
      * Is In Viewport
      * @param element : HTMLElement
      * @param proportion :number | returns true if at least [n]% of the element is in the viewport
+     * @param orientation : string | 'vertical' or 'horizontal'
      * @returns {boolean}
      */
-    ScrollSnooper.isInViewport = (element, proportion = 0) => {
-        const progress = getProgress(getElement(element), 'top bottom', 'bottom top');
+    ScrollSnooper.isInViewport = (element, proportion = 0, orientation = 'vertical') => {
+        const startPosition = orientation === 'vertical' ? 'top bottom' : 'left right';
+        const endPosition = orientation === 'vertical' ? 'bottom top' : 'right left';
+        const progress = getProgress(getElement(element), startPosition, endPosition, orientation);
         const isInViewport = progress > 0 && progress <= 1;
-        const isValidProportion = ScrollSnooper.visibility(element).proportion >= proportion;
+        const isValidProportion = ScrollSnooper.visibility(element, orientation).proportion >= proportion;
+        console.log('isValidProportion', ScrollSnooper.visibility(element, orientation).proportion, 'progress', progress)
 
         return isValidProportion && isInViewport;
     }
@@ -29,16 +54,22 @@ import {
     /**
      * Get element's visibility
      * @param element : HTMLElement
+     * @param orientation : string | 'vertical' or 'horizontal'
      * @returns {{proportion: number, pixel: number}}
      */
-    ScrollSnooper.visibility = element => {
+    ScrollSnooper.visibility = (element, orientation = 'vertical') => {
         element = getElement(element);
-        const offset = getRelativeOffset(element);
+        const offset = getRelativeOffset(element, orientation);
 
-        const visible_bottom = Math.max(0, Math.min(element.offsetHeight, -1 * offset.top_bottom));
-        const visible_top = Math.max(0, Math.min(element.offsetHeight, offset.bottom_top));
-        const pixel = Math.min(visible_bottom, visible_top, viewport().h);
-        const proportion = pixel / element.offsetHeight;
+        const isHorizontal = orientation === 'horizontal';
+        const elementSize = isHorizontal ? element.offsetWidth : element.offsetHeight;
+        const viewportSize = getViewportSize(orientation);
+
+        const visible_end = Math.max(0, Math.min(elementSize, -1 * (isHorizontal ? offset.left_right : offset.top_bottom)));
+        const visible_start = Math.max(0, Math.min(elementSize, isHorizontal ? offset.right_left : offset.bottom_top));
+        const pixel = Math.min(visible_end, visible_start, viewportSize);
+        const proportion = pixel / elementSize;
+        console.log('offset', offset, 'visible_start', visible_start)
 
         return {pixel, proportion};
     };
@@ -48,14 +79,15 @@ import {
      * Get the most visible element
      * @param elements
      * @param atLeastPixel
+     * @param orientation : string | 'vertical' or 'horizontal'
      * @returns {{isFound: boolean, el: undefined, index: undefined, pixel: number}}
      */
-    ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0) => {
+    ScrollSnooper.getTheMostVisible = (elements, atLeastPixel = 0, orientation = 'vertical') => {
         let mostVisibleElement = undefined, maxVisibility = {pixel: 0},
             isFound = false,
             index = 0, maxIndex = undefined;
         for(const element of elements){
-            const visibility = ScrollSnooper.visibility(element);
+            const visibility = ScrollSnooper.visibility(element, orientation);
             if(visibility.pixel >= atLeastPixel && visibility.pixel > maxVisibility.pixel){
                 maxVisibility = visibility;
                 mostVisibleElement = element;
@@ -80,8 +112,7 @@ import {
         const option = {
             ...{
                 trigger: undefined,
-                start: 'top bottom',
-                end: 'bottom top',
+                orientation: 'vertical', // Default orientation
                 visibility: false, // Get visibility value
                 markers: false,
                 progressOutOfView: false, // Set true to receive progress event on every update
@@ -100,7 +131,12 @@ import {
                 },
             }, ...config
         };
-        let isEnter = false, lastMostVisible = undefined, previousPosition = scroll().top;
+
+        // Set start and end based on the orientation
+        option.start = option.start || (option.orientation === 'vertical' ? 'top bottom' : 'left right');
+        option.end = option.end || (option.orientation === 'vertical' ? 'bottom top' : 'right left');
+
+        let isEnter = false, lastMostVisible = undefined, previousPosition = getScrollPosition(option.orientation);
         const element = getElement(option.trigger);
 
         // create markers
@@ -126,7 +162,7 @@ import {
         const update = () => {
             // Feature: Get the most visible
             if(option.isGetTheMostVisible){
-                const newVisible = ScrollSnooper.getTheMostVisible(option.trigger, option.atLeastPixel);
+                const newVisible = ScrollSnooper.getTheMostVisible(option.trigger, option.atLeastPixel, option.orientation);
                 if(typeof lastMostVisible === 'undefined' || newVisible.index !== lastMostVisible.index){
                     lastMostVisible = newVisible;
 
@@ -139,14 +175,15 @@ import {
                     }
                 }
             }else{
-                const progress = getProgress(element, option.start, option.end);
+                const progress = getProgress(element, option.start, option.end, option.orientation);
+                const currentPosition = getScrollPosition(option.orientation);
                 let _data = {
                     trigger: element,
                     progress: progress,
-                    direction: scroll().top > previousPosition ? -1 : 1,
+                    direction: currentPosition > previousPosition ? -1 : 1,
                     isInViewport: progress > 0 && progress < 1
                 };
-                previousPosition = scroll().top;
+                previousPosition = currentPosition;
 
                 // Event: enter, exit
                 if(_data.isInViewport){
@@ -168,21 +205,23 @@ import {
 
                 // Update markers
                 if(option.markers){
-                    const offsetTop = getOffset(element).top;
-                    const startOffset = element.offsetHeight * markers.start.element;
-                    const endOffset = element.offsetHeight * markers.end.element;
+                    const offset = getOffset(element);
+                    const isHorizontal = option.orientation === 'horizontal';
+                    const elementSize = isHorizontal ? element.offsetWidth : element.offsetHeight;
+                    const startOffset = elementSize * markers.start.element;
+                    const endOffset = elementSize * markers.end.element;
 
                     // element milestone
-                    markers.elementStart.style.top = `${offsetTop + startOffset}px`;
-                    markers.elementEnd.style.top = `${offsetTop + endOffset}px`;
+                    markers.elementStart.style[isHorizontal ? 'left' : 'top'] = `${(isHorizontal ? offset.left : offset.top) + startOffset}px`;
+                    markers.elementEnd.style[isHorizontal ? 'left' : 'top'] = `${(isHorizontal ? offset.left : offset.top) + endOffset}px`;
 
                     // element range
-                    markers.elementStart.style.height = `${endOffset - startOffset}px`;
+                    markers.elementStart.style[isHorizontal ? 'width' : 'height'] = `${endOffset - startOffset}px`;
                 }
 
                 // Get visibility value
                 if(option.visibility){
-                    _data = {..._data, visibility: ScrollSnooper.visibility(element)};
+                    _data = {..._data, visibility: ScrollSnooper.visibility(element, option.orientation)};
                 }
 
                 // Event: scroll

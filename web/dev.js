@@ -12,7 +12,7 @@ app.innerHTML = html;
 /**
  * Dev
  */
-const blocks = ["blue", "red"];
+const blocks = ["blue"];
 
 for(const block of blocks){
     const element = document.getElementById(block);
@@ -38,6 +38,7 @@ for(const block of blocks){
             const isInViewport = ScrollSnooper.isInViewport(data.trigger, input)
                 ? "true"
                 : "false";
+            console.log(isInViewport)
             document.getElementById(`${block}_line_1`).innerText = `${isInViewport}`;
 
             // progress
