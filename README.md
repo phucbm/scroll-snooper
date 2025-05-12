@@ -105,15 +105,11 @@ ScrollSnooper.create({
 | Name    | Type                | Default      | Note                                                                                |
 |---------|---------------------|--------------|-------------------------------------------------------------------------------------|
 | trigger | jQuery, HTMLElement | `undefined`  | Element(s).                                                                         |
-| start   | string              | `top bottom` | Starting position, `top bottom` means _"when the top of the trigger hits the bottom |
-
-of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the
-viewport"_. `"top 90%"` or `"bottom 100px"` are also accepted. |
+| start   | string              | `top bottom` | Starting position, `top bottom` means _"when the top of the trigger hits the bottom of the viewport"_, `"center center"` means _"when the center of the trigger hits the center of the viewport"_. `"top 90%"` or `"bottom 100px"` are also accepted. |
 | end | string | `bottom top`  | Ending position. |
 | onEnter | function | data => {} | A callback for when the trigger is scrolled into view. |
 | onLeave | function | data => {} | A callback for when the trigger is scrolled out of view. |
-| onScroll | function | data => {} | A callback that gets called everytime the scroll position changed (scrolling,
-resizing). |
+| onScroll | function | data => {} | A callback that gets called everytime the scroll position changed (scrolling, resizing). |
 
 When `isGetTheMostVisible` is `true`
 
