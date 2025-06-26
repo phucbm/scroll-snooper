@@ -1,10 +1,14 @@
-# Scroll Snooper [![Netlify Status](https://api.netlify.com/api/v1/badges/02c06c92-b238-4648-956e-339ccaa6a779/deploy-status)](https://app.netlify.com/sites/scroll-snooper/deploys)
+# Scroll Snooper
 
-[![release](https://badgen.net/github/release/phucbm/scroll-snooper/?cache=600)](https://github.com/phucbm/scroll-snooper/releases/latest)
-[![minified](https://badgen.net/badge/minified/4KB/cyan)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
-[![license](https://badgen.net/github/license/phucbm/scroll-snooper/)](https://github.com/phucbm/scroll-snooper/blob/main/LICENSE)
-[![jsdelivr](https://data.jsdelivr.com/v1/package/gh/phucbm/scroll-snooper/badge?style=rounded)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
 [![CodePen](https://badgen.net/badge/Demo/CodePen/black)](https://codepen.io/phucbui/pen/GRvxYeg)
+[![npm version](https://badgen.net/npm/v/scroll-snooper?icon=npm)](https://www.npmjs.com/package/scroll-snooper)
+[![npm downloads](https://badgen.net/npm/dm/scroll-snooper?icon=npm)](https://www.npmjs.com/package/scroll-snooper)
+[![npm downloads](https://badgen.net/npm/dependents/scroll-snooper?icon=npm)](https://www.npmjs.com/package/scroll-snooper)
+[![jsdelivr hits](https://badgen.net/jsdelivr/hits/gh/phucbm/scroll-snooper?icon=jsdelivr)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
+[![GitHub stars](https://badgen.net/github/stars/phucbm/scroll-snooper?icon=github)](https://github.com/phucbm/scroll-snooper/)
+[![GitHub release](https://badgen.net/jsdelivr/rank/npm/scroll-snooper?icon=jsdelivr)](https://github.com/phucbm/scroll-snooper/releases)
+[![license](https://badgen.net/github/license/phucbm/scroll-snooper?icon=github)](https://github.com/phucbm/scroll-snooper/blob/main/LICENSE)
+[![Made in Vietnam](https://raw.githubusercontent.com/webuild-community/badge/master/svg/made.svg)](https://webuild.community)
 
 > 🛼 Pure JavaScript API that goes snooping around elements while scrolling
 
