@@ -1,4 +1,9 @@
 /**
+ * Variables
+ */
+@use 'variables' as *;
+
+/**
  * Fonts
  */
 @font-face {
@@ -36,12 +41,6 @@
   font-style: normal;
   font-display: swap;
 }
-
-/**
- * Variables
- */
-@import 'variables';
-
 
 /**
  * Common
