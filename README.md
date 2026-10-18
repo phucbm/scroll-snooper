@@ -3,7 +3,6 @@
 [![CodePen](https://badgen.net/badge/Demo/CodePen/black)](https://codepen.io/phucbui/pen/GRvxYeg)
 [![npm version](https://badgen.net/npm/v/scroll-snooper?icon=npm)](https://www.npmjs.com/package/scroll-snooper)
 [![npm downloads](https://badgen.net/npm/dm/scroll-snooper?icon=npm)](https://www.npmjs.com/package/scroll-snooper)
-[![npm downloads](https://badgen.net/npm/dependents/scroll-snooper?icon=npm)](https://www.npmjs.com/package/scroll-snooper)
 [![jsdelivr hits](https://badgen.net/jsdelivr/hits/gh/phucbm/scroll-snooper?icon=jsdelivr)](https://www.jsdelivr.com/package/gh/phucbm/scroll-snooper)
 [![GitHub stars](https://badgen.net/github/stars/phucbm/scroll-snooper?icon=github)](https://github.com/phucbm/scroll-snooper/)
 [![GitHub release](https://badgen.net/jsdelivr/rank/npm/scroll-snooper?icon=jsdelivr)](https://github.com/phucbm/scroll-snooper/releases)
@@ -11,6 +10,8 @@
 [![Made in Vietnam](https://raw.githubusercontent.com/webuild-community/badge/master/svg/made.svg)](https://webuild.community)
 
 > 🛼 Pure JavaScript API that goes snooping around elements while scrolling
+
+Demo 👉 https://phucbm.github.io/scroll-snooper/
 
 ## Getting started
 
@@ -104,7 +105,7 @@ ScrollSnooper.create({
 
 ## Documentation
 
-### ScrollSnooper.create({}) : void
+### ScrollSnooper.create({}) : {destroy}
 
 | Name    | Type                | Default      | Note                                                                                |
 |---------|---------------------|--------------|-------------------------------------------------------------------------------------|
@@ -114,6 +115,15 @@ ScrollSnooper.create({
 | onEnter | function | data => {} | A callback for when the trigger is scrolled into view. |
 | onLeave | function | data => {} | A callback for when the trigger is scrolled out of view. |
 | onScroll | function | data => {} | A callback that gets called everytime the scroll position changed (scrolling, resizing). |
+
+`create()` returns an object with a `destroy()` method to stop watching and remove the markers.
+
+```js
+const snooper = ScrollSnooper.create({trigger: document.querySelector('.block')});
+
+// later
+snooper.destroy();
+```
 
 When `isGetTheMostVisible` is `true`
 
@@ -150,29 +160,28 @@ console.log(ScrollSnooper.getTheMostVisible(document.querySelectorAll('.blocks')
 
 ## Deployment
 
-Start dev server
-
 ```shell
-npm run dev
+# Install dependencies
+pnpm install
+
+# Start dev server
+pnpm dev
+
+# Build production files (UMD and NPM package) from ./src to ./dist
+pnpm prod
+
+# Build demo site from ./web to ./build
+pnpm build
 ```
 
-Build production files (UMD and NPM package)
+The demo site is deployed to GitHub Pages on every push to `main`.
 
-```shell
-npm run prod
-```
+### Publish
 
-Build sources from `./web` to `./build`
-
-```shell
-npm run build
-```
-
-Build files from `./src` to `./dist` then publish to `npm`
-
-```shell
-npm run publish
-```
+Publishing to NPM is automated by [publish-npm-action](https://github.com/phucbm/publish-npm-action)
+via [OIDC trusted publishing](https://docs.npmjs.com/trusted-publishers).
+Create a GitHub release with a tag like `v2.1.0`: the workflow sets `package.json` to that version, builds `dist/`, commits
+both back to `main` and publishes the package.
 
 ## License
 
