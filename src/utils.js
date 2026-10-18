@@ -132,9 +132,10 @@ export function getPositionFromString(string, referenceHeight = viewport().h){
 export function getCoordinateFromString(string, elHeight = viewport().h){
     const split = string.split(' ');
     const element = getPositionFromString(split[0], elHeight);
-    const viewport = getPositionFromString(split[1]);
+    // don't name it `viewport`, it would shadow viewport() used in the default param above
+    const viewportPosition = getPositionFromString(split[1]);
 
-    return {element, viewport};
+    return {element, viewport: viewportPosition};
 }
 
 
