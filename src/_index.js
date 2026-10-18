@@ -38,7 +38,7 @@ import {
         const visible_bottom = Math.max(0, Math.min(element.offsetHeight, -1 * offset.top_bottom));
         const visible_top = Math.max(0, Math.min(element.offsetHeight, offset.bottom_top));
         const pixel = Math.min(visible_bottom, visible_top, viewport().h);
-        const proportion = pixel / element.offsetHeight;
+        const proportion = element.offsetHeight ? pixel / element.offsetHeight : 0; // avoid NaN on zero-height elements
 
         return {pixel, proportion};
     };
@@ -75,6 +75,7 @@ import {
     /**
      * Create
      * @param config : object
+     * @returns {{destroy: function}}
      */
     ScrollSnooper.create = (config) => {
         const option = {
@@ -102,6 +103,11 @@ import {
         };
         let isEnter = false, lastMostVisible = undefined, previousPosition = scroll().top;
         const element = getElement(option.trigger);
+
+        if(!element){
+            console.warn('ScrollSnooper: trigger is not found', option.trigger);
+            return {destroy: () => {}};
+        }
 
         // create markers
         const markers = {};
@@ -191,16 +197,26 @@ import {
         };
 
         // trigger update using rAF
-        let flag = null;
+        let flag = null, rafId;
         const getFlag = () => JSON.stringify({...scroll(), ...viewport()});
         const fire = () => {
             if(flag !== getFlag()){
                 update();
                 flag = getFlag();
             }
-            window.requestAnimationFrame(fire);
+            rafId = window.requestAnimationFrame(fire);
         }
-        window.requestAnimationFrame(fire);
+        rafId = window.requestAnimationFrame(fire);
+
+        return {
+            // stop watching and remove markers
+            destroy: () => {
+                window.cancelAnimationFrame(rafId);
+                Object.values(markers).forEach(marker => {
+                    if(marker instanceof HTMLElement) marker.remove();
+                });
+            }
+        };
     }
 
 })(window.ScrollSnooper = window.ScrollSnooper || {});
